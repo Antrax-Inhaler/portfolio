@@ -1013,3 +1013,32 @@ body.dark .splash-loader::after {
         transform-origin: right;
     }
 }
+
+/* Replace the previous animation CSS with this */
+.project-image-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.project-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+.project-image.primary {
+    opacity: 1;
+}
+
+.project-card:hover .project-image {
+    opacity: 0;
+}
+
+.project-card:hover .project-image.primary {
+    opacity: 0;
+}
