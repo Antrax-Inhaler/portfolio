@@ -584,32 +584,42 @@ contactForm.addEventListener('submit', async function(e) {
     }
 });
 document.querySelectorAll('.project-card').forEach(card => {
-    const images = card.querySelectorAll('.project-image');
+    const primaryImage = card.querySelector('.project-image.primary');
     const secondaryImages = card.querySelectorAll('.project-image.secondary');
     let currentIndex = 0;
     let intervalId = null;
     
+    // Initialize all secondary images to hidden
+    secondaryImages.forEach(img => {
+        img.style.opacity = '0';
+        img.style.zIndex = '1';
+    });
+    
     card.addEventListener('mouseenter', () => {
         if (secondaryImages.length > 0) {
-            // Show first secondary image immediately
-            secondaryImages[currentIndex].style.opacity = 1;
+            // Immediately show first secondary image
+            secondaryImages[currentIndex].style.opacity = '1';
+            secondaryImages[currentIndex].style.zIndex = '3';
             
-            // Start cycling
+            // Start cycling through images
             intervalId = setInterval(() => {
-                // Hide current image
-                secondaryImages[currentIndex].style.opacity = 0;
+                // Fade out current image
+                secondaryImages[currentIndex].style.opacity = '0';
+                secondaryImages[currentIndex].style.zIndex = '1';
                 
-                // Move to next image
+                // Move to next image (loop back to 0 if at end)
                 currentIndex = (currentIndex + 1) % secondaryImages.length;
                 
-                // Show next image
-                secondaryImages[currentIndex].style.opacity = 1;
-            }, 2000); // Change image every 2 seconds
+                // Fade in next image
+                secondaryImages[currentIndex].style.opacity = '1';
+                secondaryImages[currentIndex].style.zIndex = '3';
+                
+            }, 2000); // Change every 2 seconds
         }
     });
     
     card.addEventListener('mouseleave', () => {
-        // Stop the interval
+        // Stop the animation
         if (intervalId) {
             clearInterval(intervalId);
             intervalId = null;
@@ -617,11 +627,13 @@ document.querySelectorAll('.project-card').forEach(card => {
         
         // Hide all secondary images
         secondaryImages.forEach(img => {
-            img.style.opacity = 0;
+            img.style.opacity = '0';
+            img.style.zIndex = '1';
         });
         
         // Show primary image
-        card.querySelector('.project-image.primary').style.opacity = 1;
+        primaryImage.style.opacity = '1';
+        primaryImage.style.zIndex = '2';
         
         // Reset to first image for next hover
         currentIndex = 0;
