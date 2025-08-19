@@ -1014,7 +1014,7 @@ body.dark .splash-loader::after {
     }
 }
 
-/* Replace the previous animation CSS with this */
+/* Add to your existing CSS */
 .project-image-container {
     position: relative;
     width: 100%;
@@ -1028,17 +1028,85 @@ body.dark .splash-loader::after {
     height: 100%;
     object-fit: cover;
     transition: opacity 0.5s ease;
-    opacity: 0;
-}
-
-.project-image.primary {
     opacity: 1;
 }
 
-.project-card:hover .project-image {
+.project-image.secondary {
     opacity: 0;
+}
+
+.project-card:hover .project-image.secondary {
+    opacity: 1;
+    animation: imageCycle 8s infinite;
 }
 
 .project-card:hover .project-image.primary {
     opacity: 0;
 }
+
+@keyframes imageCycle {
+    0%, 100% {
+        opacity: 1;
+    }
+    25%, 75% {
+        opacity: 0;
+    }
+}
+    .skills-section {
+        padding: 6rem 5%;
+        background: rgba(248, 250, 252, 0.5);
+    }
+    
+    body.dark .skills-section {
+        background: rgba(15, 23, 42, 0.5);
+    }
+    
+    .skills-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .skill-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem 1rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    body.dark .skill-item {
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .skill-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+    }
+    
+    body.dark .skill-item:hover {
+        box-shadow: 0 10px 25px rgba(110, 7, 243, 0.2);
+    }
+    
+    .skill-icon {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        margin-bottom: 1rem;
+    }
+    
+    .skill-name {
+        font-weight: 600;
+        text-align: center;
+        color: var(--text-light);
+    }
+    
+    body.dark .skill-name {
+        color: var(--text-dark);
+    }
