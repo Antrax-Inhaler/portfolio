@@ -1069,7 +1069,7 @@ body.dark .splash-loader::after {
         margin: 0 auto;
     }
     
-    .skill-item {
+    .skills-item {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1080,17 +1080,17 @@ body.dark .splash-loader::after {
         transition: all 0.3s ease;
     }
     
-    body.dark .skill-item {
+    body.dark .skills-item {
         background: rgba(255, 255, 255, 0.05);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
     
-    .skill-item:hover {
+    .skills-item:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
     }
     
-    body.dark .skill-item:hover {
+    body.dark .skills-item:hover {
         box-shadow: 0 10px 25px rgba(110, 7, 243, 0.2);
     }
     
