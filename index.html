@@ -413,14 +413,15 @@
             </div>
             
             <div class="contact-form">
-                <form   action="https://formspree.io/f/xwpqderr" method="POST" id="contactForm">
+                <form  style="display: none;"  action="https://formspree.io/f/xwpqderr" method="POST" id="contactForm">
+
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" id="name" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" class="form-control" required>
+                        <input type="email" name="email" id="email" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="subject">Subject</label>
@@ -428,7 +429,27 @@
                     </div>
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" class="form-control" required></textarea>
+                        <textarea id="message" name="message" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+                <form   action="https://formspree.io/f/xwpqderr" method="POST">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" class="form-control" required></textarea>
                     </div>
                     <button type="submit" class="submit-btn">Send Message</button>
                 </form>
@@ -584,42 +605,32 @@ contactForm.addEventListener('submit', async function(e) {
     }
 });
 document.querySelectorAll('.project-card').forEach(card => {
-    const primaryImage = card.querySelector('.project-image.primary');
+    const images = card.querySelectorAll('.project-image');
     const secondaryImages = card.querySelectorAll('.project-image.secondary');
     let currentIndex = 0;
     let intervalId = null;
     
-    // Initialize all secondary images to hidden
-    secondaryImages.forEach(img => {
-        img.style.opacity = '0';
-        img.style.zIndex = '1';
-    });
-    
     card.addEventListener('mouseenter', () => {
         if (secondaryImages.length > 0) {
-            // Immediately show first secondary image
-            secondaryImages[currentIndex].style.opacity = '1';
-            secondaryImages[currentIndex].style.zIndex = '3';
+            // Show first secondary image immediately
+            secondaryImages[currentIndex].style.opacity = 1;
             
-            // Start cycling through images
+            // Start cycling
             intervalId = setInterval(() => {
-                // Fade out current image
-                secondaryImages[currentIndex].style.opacity = '0';
-                secondaryImages[currentIndex].style.zIndex = '1';
+                // Hide current image
+                secondaryImages[currentIndex].style.opacity = 0;
                 
-                // Move to next image (loop back to 0 if at end)
+                // Move to next image
                 currentIndex = (currentIndex + 1) % secondaryImages.length;
                 
-                // Fade in next image
-                secondaryImages[currentIndex].style.opacity = '1';
-                secondaryImages[currentIndex].style.zIndex = '3';
-                
-            }, 2000); // Change every 2 seconds
+                // Show next image
+                secondaryImages[currentIndex].style.opacity = 1;
+            }, 2000); // Change image every 2 seconds
         }
     });
     
     card.addEventListener('mouseleave', () => {
-        // Stop the animation
+        // Stop the interval
         if (intervalId) {
             clearInterval(intervalId);
             intervalId = null;
@@ -627,13 +638,11 @@ document.querySelectorAll('.project-card').forEach(card => {
         
         // Hide all secondary images
         secondaryImages.forEach(img => {
-            img.style.opacity = '0';
-            img.style.zIndex = '1';
+            img.style.opacity = 0;
         });
         
         // Show primary image
-        primaryImage.style.opacity = '1';
-        primaryImage.style.zIndex = '2';
+        card.querySelector('.project-image.primary').style.opacity = 1;
         
         // Reset to first image for next hover
         currentIndex = 0;
