@@ -5,605 +5,1780 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joven Andrei Lagahit | Full-Stack Developer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #06b6d4;
+            --accent: #f97316;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+            --transition-slow: all 0.5s ease;
+            --radius: 12px;
+            --max-width: 1200px;
+        }
+
+        [data-theme="dark"] {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --secondary: #22d3ee;
+            --accent: #fb923c;
+            --text: #f3f4f6;
+            --text-light: #d1d5db;
+            --bg: #111827;
+            --bg-secondary: #1f2937;
+            --bg-tertiary: #374151;
+            --card-bg: #1f2937;
+            --border: #374151;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+            transition: var(--transition-slow);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(var(--bg-rgb), 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        header.scrolled {
+            padding: 0.7rem 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .logo:hover::after {
+            width: 100%;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            position: relative;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+            background: var(--primary);
+            color: white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+            z-index: -1;
+        }
+
+        .hero-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            width: 100%;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            position: relative;
+        }
+
+        .hero-text::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.1;
+            z-index: -1;
+            animation: pulse 2s infinite;
+        }
+
+        .hero-text::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--secondary);
+            opacity: 0.1;
+            z-index: -1;
+            animation: pulse 2s infinite reverse;
+        }
+
+        .my-name {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-text h2 {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-description {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .hero-education {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            width: 100%;
+        }
+
+        .cta-button:first-child {
+            background: var(--primary);
+            color: white;
+        }
+
+        .cta-button:first-child::before {
+            background: var(--primary-dark);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .cta-button.secondary:hover {
+            color: white;
+        }
+
+        .hero-social {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 1s both;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            color: var(--text);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .social-link:hover {
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .social-link:hover::before {
+            transform: translateY(0);
+        }
+
+        .hero-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-image {
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid var(--primary);
+            box-shadow: var(--shadow-lg);
+            animation: float 6s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            opacity: 0.2;
+            z-index: 1;
+            animation: pulse 3s infinite;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-down i {
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 2px;
+        }
+
+        /* Skills Section */
+        .skills-section {
+            background: var(--bg-secondary);
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .skills-item {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .skills-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: height 0.3s ease;
+            z-index: -1;
+        }
+
+        .skills-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            color: white;
+        }
+
+        .skills-item:hover::before {
+            height: 100%;
+        }
+
+        .skills-item:hover .skill-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        .skill-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            transition: var(--transition);
+        }
+
+        .skill-name {
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-image-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease;
+        }
+
+        .project-image.secondary {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        .project-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 200px);
+        }
+
+        .project-info h3 {
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .project-info p {
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+            flex-grow: 1;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .tech-tag {
+            background: var(--bg-secondary);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            background: var(--bg-secondary);
+            color: var(--text);
+        }
+
+        .project-links a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Experience Section */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            width: 50%;
+            padding-right: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: auto;
+            padding-left: 3rem;
+            padding-right: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 0;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 4px solid var(--bg);
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            right: auto;
+            left: -10px;
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .timeline-content p {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .timeline-content ul {
+            padding-left: 1.2rem;
+        }
+
+        .timeline-content ul li {
+            list-style-type: disc;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .contact-details {
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .contact-text h4 {
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-text a, .contact-text p {
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .contact-text a:hover {
+            color: var(--primary);
+        }
+
+        .contact-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .contact-social a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .contact-social a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .contact-form {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            color: var(--text-light);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.2;
+            }
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Particles Background */
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+
+        /* Scroll Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 1001;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+
+        /* Media Queries */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .hero-text::before, .hero-text::after {
+                display: none;
+            }
+            
+            .my-name {
+                font-size: 3rem;
+            }
+            
+            .profile-image {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .image-overlay {
+                width: 310px;
+                height: 310px;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+            
+            nav ul {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: var(--bg);
+                padding: 2rem;
+                box-shadow: var(--shadow);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+                z-index: 999;
+            }
+            
+            nav ul.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .my-name {
+                font-size: 2.5rem;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 50px;
+                padding-right: 0;
+            }
+            
+            .timeline-item:nth-child(even) {
+                margin-left: 0;
+                padding-left: 50px;
+            }
+            
+            .timeline-dot {
+                left: 10px;
+                right: auto;
+            }
+            
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .my-name {
+                font-size: 2rem;
+            }
+            
+            .hero-text h2 {
+                font-size: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .profile-image {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .image-overlay {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .skills-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+
+        /* Utility Classes */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Dark mode transition for smooth theme switching */
+        body, .skills-item, .project-card, .timeline-content, .contact-form {
+            transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+        }
+    </style>
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
     <!-- Header -->
-    <header>
-        <a href="#" class="logo">Andrei</a>
-        <nav>
-            <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-        <button class="theme-toggle" id="themeToggle">
-            <i class="fas fa-moon"></i>
-        </button>
+    <header id="header">
+        <div class="header-container">
+            <a href="#" class="logo">Andrei</a>
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
     </header>
 
-<section class="hero" id="home">
-    <div class="hero-container">
-        <div class="hero-content">
-            <div class="hero-text">
-                 <div class="hero-image image-top">
-                <img src="ako2.png" alt="Joven Andrei Lagahit" class="profile-image">
-                <div class="image-overlay"></div>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="particles-container" id="particles"></div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="my-name">Joven Andrei Lagahit</h1>
+                    <h2>Full-Stack Developer</h2>
+                    <p class="hero-description">Passionate developer with hands-on experience in building scalable, real-world web and desktop applications. Strong in API integration, data visualization, and system design. Currently seeking opportunities to apply technical skills in impactful software development roles.</p>
+                    
+                    <div class="hero-education">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Bachelor of Science in Information Technology - Mindoro State University (2021-2025)</span>
+                    </div>
+                    
+                    <div class="hero-actions">
+                        <a href="#projects" class="cta-button">
+                            <i class="fas fa-briefcase"></i> View My Work
+                        </a>
+                        <a href="Resume - Joven Andrei R. Lagahit.pdf" download class="cta-button secondary">
+                            <i class="fas fa-download"></i> Download Resume
+                        </a>
+                    </div>
+                    
+                    <div class="hero-social">
+                        <a href="https://github.com/Antrax-Inhaler" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="www.linkedin.com/in/lagahit-joven-andrei-879a8b381" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="mailto:jovenandrei0324@gmail.com" class="social-link">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="tel:+639670829620" class="social-link">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hero-image">
+                    <img src="ako2.png" alt="Joven Andrei Lagahit" class="profile-image">
+                    <div class="image-overlay"></div>
+                </div>
             </div>
-                <h1 class="my-name">Joven Andrei Lagahit</h1>
-                <h2>Full-Stack Developer</h2>
-                <p class="hero-description">Passionate developer with hands-on experience in building scalable, real-world web and desktop applications. Strong in API integration, data visualization, and system design. Currently seeking opportunities to apply technical skills in impactful software development roles.</p>
-                
-                <div class="hero-education">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>Bachelor of Science in Information Technology - Mindoro State University (2021-2025)</span>
+        </div>
+        
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section skills-section" id="skills">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="container">
+            <div class="skills-container">
+                <!-- Programming Languages -->
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" class="skill-icon" alt="PHP">
+                    <span class="skill-name">PHP</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="skill-icon" alt="JavaScript">
+                    <span class="skill-name">JavaScript</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" class="skill-icon" alt="C#">
+                    <span class="skill-name">C#</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" class="skill-icon" alt="MySQL">
+                    <span class="skills-name">MySQL</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="images/sql_server.png" class="skill-icon" alt="SQL Server">
+                    <span class="skills-name">SQL Server</span>
                 </div>
                 
-                <div class="hero-actions">
-                    <a href="#projects" class="cta-button">
-                        <i class="fas fa-briefcase"></i> View My Work
-                    </a>
-                    <a href="Resume - Joven Andrei R. Lagahit.pdf" download class="cta-button secondary">
-                        <i class="fas fa-download"></i> Download Resume
-                    </a>
+                <!-- Frameworks -->
+                <div class="skills-item animate-on-scroll">
+                    <img src="images/Laravel.svg.png" class="skill-icon" alt="Laravel">
+                    <span class="skill-name">Laravel</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original-wordmark.svg" class="skill-icon" alt="Vue.js">
+                    <span class="skill-name">Vue.js</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original-wordmark.svg" class="skill-icon" alt="React.js">
+                    <span class="skill-name">React.js</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original-wordmark.svg" class="skill-icon" alt=".NET Core">
+                    <span class="skill-name">.NET Core</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="images/Tailwind_CSS_Logo.svg.png" class="skill-icon" alt="Tailwind CSS">
+                    <span class="skill-name">Tailwind CSS</span>
                 </div>
                 
-                <div class="hero-social">
-                    <a href="https://github.com/Antrax-Inhaler" target="_blank" class="social-link">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="www.linkedin.com/in/lagahit-joven-andrei-879a8b381" class="social-link">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="mailto:jovenandrei0324@gmail.com" class="social-link">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                    <a href="tel:+639670829620" class="social-link">
-                        <i class="fas fa-phone"></i>
-                    </a>
+                <!-- Tools & APIs -->
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="skill-icon" alt="Git">
+                    <span class="skill-name">Git</span>
                 </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" class="skill-icon" alt="Google Maps API">
+                    <span class="skill-name">Google Maps API</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/OpenWeatherMap_logo.png" class="skill-icon" alt="OpenWeather API">
+                    <span class="skill-name">OpenWeather API</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2813/2813828.png" class="skill-icon" alt="Gemini API">
+                    <span class="skill-name">Gemini API</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/crystal/crystal-original.svg" class="skill-icon" alt="Crystal Reports">
+                    <span class="skill-name">Crystal Reports</span>
+                </div>
+                
+                <!-- Design Tools -->
+                <div class="skills-item animate-on-scroll">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" class="skill-icon" alt="Photoshop">
+                    <span class="skill-name">Photoshop</span>
+                </div>
+                <div class="skills-item animate-on-scroll">
+                    <img src="images/Adobe_Flash_Professional_Icon.svg.png" class="skill-icon" alt="Adobe Flash">
+                    <span class="skill-name">Adobe Flash</span>
+                </div>
+                 <div class="skills-item animate-on-scroll">
+                    <img src="images/Materialize.png" class="skill-icon" alt="Materialize">
+                    <span class="skill-name">Materialize CSS</span>
+                </div>
+                   <!-- TypeScript -->
+            <div class="skills-item animate-on-scroll">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" class="skill-icon" alt="TypeScript">
+                <span class="skill-name">TypeScript</span>
             </div>
             
-            <div class="hero-image image-bottom">
-                <img src="ako2.png" alt="Joven Andrei Lagahit" class="profile-image">
-                <div class="image-overlay"></div>
+            <!-- ASP.NET Core -->
+            <div class="skills-item animate-on-scroll">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg" class="skill-icon" alt="ASP.NET Core">
+                <span class="skill-name">ASP.NET Core</span>
+            </div>
+            
+            <!-- Entity Framework -->
+            <div class="skills-item animate-on-scroll">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original-wordmark.svg" class="skill-icon" alt="Entity Framework">
+                <span class="skill-name">Entity Framework</span>
+            </div>
+            
+            <!-- Bootstrap -->
+            <div class="skills-item animate-on-scroll">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-plain-wordmark.svg" class="skill-icon" alt="Bootstrap">
+                <span class="skill-name">Bootstrap</span>
+            </div>
+            
+            <!-- RESTful APIs -->
+            <div class="skills-item animate-on-scroll">
+                <img src="https://cdn-icons-png.flaticon.com/512/2164/2164832.png" class="skill-icon" alt="RESTful APIs">
+                <span class="skill-name">RESTful APIs</span>
+            </div>
+            
+            <!-- JWT Authentication -->
+            <div class="skills-item animate-on-scroll">
+                <img src="https://jwt.io/img/pic_logo.svg" class="skill-icon" alt="JWT Authentication">
+                <span class="skill-name">JWT Authentication</span>
+            </div>
             </div>
         </div>
-    </div>
-    
-    <div class="scroll-down">
-        <i class="fas fa-chevron-down"></i>
-    </div>
-</section>
-<section class="section skills-section" id="skills">
-    <h2 class="section-title">Technical Skills</h2>
-    <div class="skills-container">
-        <!-- Programming Languages -->
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" class="skill-icon" alt="PHP">
-            <span class="skill-name">PHP</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="skill-icon" alt="JavaScript">
-            <span class="skill-name">JavaScript</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" class="skill-icon" alt="C#">
-            <span class="skill-name">C#</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" class="skill-icon" alt="MySQL">
-            <span class="skills-name">MySQL</span>
-        </div>
-        <div class="skills-item">
-            <img src="images/sql_server.png" class="skill-icon" alt="SQL Server">
-            <span class="skills-name">SQL Server</span>
-        </div>
-        
-        <!-- Frameworks -->
-        <div class="skills-item">
-            <img src="images/Laravel.svg.png" class="skill-icon" alt="Laravel">
-            <span class="skill-name">Laravel</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original-wordmark.svg" class="skill-icon" alt="Vue.js">
-            <span class="skill-name">Vue.js</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original-wordmark.svg" class="skill-icon" alt="React.js">
-            <span class="skill-name">React.js</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original-wordmark.svg" class="skill-icon" alt=".NET Core">
-            <span class="skill-name">.NET Core</span>
-        </div>
-        <div class="skills-item">
-            <img src="images/Tailwind_CSS_Logo.svg.png" class="skill-icon" alt="Tailwind CSS">
-            <span class="skill-name">Tailwind CSS</span>
-        </div>
-        
-        <!-- Tools & APIs -->
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="skill-icon" alt="Git">
-            <span class="skill-name">Git</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" class="skill-icon" alt="Google Maps API">
-            <span class="skill-name">Google Maps API</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/OpenWeatherMap_logo.png" class="skill-icon" alt="OpenWeather API">
-            <span class="skill-name">OpenWeather API</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn-icons-png.flaticon.com/512/2813/2813828.png" class="skill-icon" alt="Gemini API">
-            <span class="skill-name">Gemini API</span>
-        </div>
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/crystal/crystal-original.svg" class="skill-icon" alt="Crystal Reports">
-            <span class="skill-name">Crystal Reports</span>
-        </div>
-        
-        <!-- Design Tools -->
-        <div class="skills-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" class="skill-icon" alt="Photoshop">
-            <span class="skill-name">Photoshop</span>
-        </div>
-        <div class="skills-item">
-            <img src="images/Adobe_Flash_Professional_Icon.svg.png" class="skill-icon" alt="Adobe Flash">
-            <span class="skill-name">Adobe Flash</span>
-        </div>
-         <div class="skills-item">
-            <img src="images/Materialize.png" class="skill-icon" alt="Materialize">
-            <span class="skill-name">Materialize CSS</span>
-        </div>
-           <!-- TypeScript -->
-    <div class="skills-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" class="skill-icon" alt="TypeScript">
-        <span class="skill-name">TypeScript</span>
-    </div>
-    
-    <!-- ASP.NET Core -->
-    <div class="skills-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg" class="skill-icon" alt="ASP.NET Core">
-        <span class="skill-name">ASP.NET Core</span>
-    </div>
-    
-    <!-- Entity Framework -->
-    <div class="skills-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original-wordmark.svg" class="skill-icon" alt="Entity Framework">
-        <span class="skill-name">Entity Framework</span>
-    </div>
-    
-    <!-- Bootstrap -->
-    <div class="skills-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-plain-wordmark.svg" class="skill-icon" alt="Bootstrap">
-        <span class="skill-name">Bootstrap</span>
-    </div>
-    
-    <!-- RESTful APIs -->
-    <div class="skills-item">
-        <img src="https://cdn-icons-png.flaticon.com/512/2164/2164832.png" class="skill-icon" alt="RESTful APIs">
-        <span class="skill-name">RESTful APIs</span>
-    </div>
-    
-    <!-- JWT Authentication -->
-    <div class="skills-item">
-        <img src="https://jwt.io/img/pic_logo.svg" class="skill-icon" alt="JWT Authentication">
-        <span class="skill-name">JWT Authentication</span>
-    </div>
-    
-    <!-- ASP.NET Core Identity -->
-    <!-- <div class="skills-item">
-        <img src="https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity/_static/identity.svg?view=aspnetcore-8.0" class="skill-icon" alt="ASP.NET Identity">
-        <span class="skill-name">ASP.NET Identity</span>
-    </div>
-     -->
-    </div>
-</section>
+    </section>
+
     <!-- Projects Section -->
-<section class="section" id="projects">
-    <h2 class="section-title">My Projects</h2>
-    <div class="projects-grid">
-        <!-- Project 1 - Agronet -->
-        <div class="project-card">
-            <div class="project-image-container">
-                <img src="agronet/slide1.png" alt="Agronet Dashboard" class="project-image primary">
-                <img src="agronet/slide2.png" alt="Agronet Analytics" class="project-image secondary">
-                <img src="agronet/slide3.png" alt="Agronet Mapping" class="project-image secondary">
-                <img src="agronet/slide4.png" alt="Agronet Reports" class="project-image secondary">
-                <img src="agronet/slide5.png" alt="Agronet Admin" class="project-image secondary">
-                <img src="agronet/slide6.png" alt="Agronet Mobile" class="project-image secondary">
+    <section class="section" id="projects">
+        <h2 class="section-title">My Projects</h2>
+        <div class="container">
+            <div class="projects-grid">
+                <!-- Project 1 - Agronet -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="agronet/slide1.png" alt="Agronet Dashboard" class="project-image primary">
+                        <img src="agronet/slide2.png" alt="Agronet Analytics" class="project-image secondary">
+                        <img src="agronet/slide3.png" alt="Agronet Mapping" class="project-image secondary">
+                        <img src="agronet/slide4.png" alt="Agronet Reports" class="project-image secondary">
+                        <img src="agronet/slide5.png" alt="Agronet Admin" class="project-image secondary">
+                        <img src="agronet/slide6.png" alt="Agronet Mobile" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>Multi-Tenant Crop Farm Management System</h3>
+                        <p>A scalable system supporting multiple user types in the agriculture sector with AI-driven crop analysis and real-time weather forecasting.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">PHP</span>
+                            <span class="tech-tag">AJAX</span>
+                            <span class="tech-tag">MySQL</span>
+                            <span class="tech-tag">Gemini API</span>
+                            <span class="tech-tag">Google Maps API</span>
+                        </div>
+                        <div class="project-links">
+                           
+                            <a href="https://github.com/Antrax-inhaler/-PHP--Multi-Tenant-Crop-Farm-Management-System-with-Integrated-Analytics-and-Mapping-Features" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 - Payroll System -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="payroll/slide1.png" alt="Payroll Dashboard" class="project-image primary">
+                        <img src="payroll/slide2.png" alt="Employee Management" class="project-image secondary">
+                        <img src="payroll/slide3.png" alt="Salary Computation" class="project-image secondary">
+                        <img src="payroll/slide4.png" alt="Payslip Generation" class="project-image secondary">
+                                                    <img src="payroll/slide5.png" alt="Payslip Generation" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>Payroll System</h3>
+                        <p>A reliable payroll system for accurate employee compensation with automated salary computation, tax deductions, and leave balances.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">C#</span>
+                            <span class="tech-tag">.NET MVC</span>
+                            <span class="tech-tag">SQL Server</span>
+                            <span class="tech-tag">Crystal Reports</span>
+                        </div>
+                        <div class="project-links">
+                           
+                            <a href="https://github.com/Antrax-Inhaler/Payroll-Management-System---C--net" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 - HRIS -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="hrms/slide1.png" alt="HRIS Dashboard" class="project-image primary">
+                        <img src="hrms/slide2.png" alt="Employee Profiles" class="project-image secondary">
+                        <img src="hrms/slide3.png" alt="Attendance Tracking" class="project-image secondary">
+                        <img src="hrms/slide4.png" alt="Payroll Processing" class="project-image secondary">
+                        <img src="hrms/slide5.png" alt="Recruitment Portal" class="project-image secondary">
+                        <img src="hrms/slide6.png" alt="Reports" class="project-image secondary">
+                        <img src="hrms/slide7.png" alt="Mobile View" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>Integrated HRIS</h3>
+                        <p>A unified HR platform supporting multi-type payroll processing, fingerprint biometric attendance tracking, and job portal with automatic PDS generation.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Laravel</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">MySQL</span>
+                            <span class="tech-tag">REST API</span>
+                        </div>
+                        <div class="project-links">
+                           
+                            <a href="https://github.com/Antrax-Inhaler/Integrated-HRIS-with-Multi-Payroll-Processing-Biometric-Attendance-and-Recruitment-Portal" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 4 - Cemetery -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="cemetery/slide1.png" alt="Cemetery Dashboard" class="project-image primary">
+                        <img src="cemetery/slide2.png" alt="Plot Management" class="project-image secondary">
+                        <img src="cemetery/slide3.png" alt="Interactive Map" class="project-image secondary">
+                        <img src="cemetery/slide4.png" alt="Appointments" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>Cemetery Management System</h3>
+                        <p>A user-friendly system with interactive map layout for plots, plot reservations, appointment scheduling, and cemetery block management.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Laravel</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Google Calendar API</span>
+                            <span class="tech-tag">CSS3</span>
+                        </div>
+                        <div class="project-links">
+                          
+                            <a href="https://github.com/Antrax-Inhaler/Interactive-Cemetery-Management-System-with-Plot-Reservation-and-Appointment-Scheduling-Laravel-" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 5 - Alumni Tracker -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="alumni/slide1.png" alt="Alumni Dashboard" class="project-image primary">
+                        <img src="alumni/slide2.png" alt="User Profiles" class="project-image secondary">
+                        <img src="alumni/slide3.png" alt="Geographical View" class="project-image secondary">
+                        <img src="alumni/slide4.png" alt="Social Features" class="project-image secondary">
+                        <img src="alumni/slide5.png" alt="Mobile App" class="project-image secondary">
+                        <img src="alumni/slide6.png" alt="Analytics" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>Alumni Tracker with Social Media</h3>
+                        <p>A social web platform to connect alumni and track their career paths and locations with geographical insights into alumni distribution.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Laravel</span>
+                            <span class="tech-tag">Vue.js</span>
+                            <span class="tech-tag">Inertia.js</span>
+                            <span class="tech-tag">Google Maps API</span>
+                        </div>
+                        <div class="project-links">
+                          
+                            <a href="https://github.com/Antrax-Inhaler/eTraCCS_Alumni" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                 <div class="project-card animate-on-scroll">
+                <div class="project-image-container">
+                    <!-- Replace these with actual screenshots when available -->
+                    <img src="fitness-tracker/slide1.png" alt="Alumni Dashboard" class="project-image primary">
+                        <img src="fitness-tracker/slide2.png" alt="User Profiles" class="project-image secondary">
+                </div>
+                <div class="project-info">
+                    <h3>Fitness Tracker & Meal Planner</h3>
+                    <p>A full-stack web application for tracking meals, workouts, and nutrition with personalized dashboards, calorie tracking, and progress analytics. Features secure user authentication and responsive design.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">ASP.NET Core</span>
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">SQL Server</span>
+                        <span class="tech-tag">Entity Framework</span>
+                        <span class="tech-tag">Bootstrap</span>
+                    </div>
+                    <div class="project-links">
+                      
+                        <a href="https://github.com/Antrax-Inhaler/fitness-planner" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="project-info">
-                <h3>Multi-Tenant Crop Farm Management System</h3>
-                <p>A scalable system supporting multiple user types in the agriculture sector with AI-driven crop analysis and real-time weather forecasting.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">PHP</span>
-                    <span class="tech-tag">AJAX</span>
-                    <span class="tech-tag">MySQL</span>
-                    <span class="tech-tag">Gemini API</span>
-                    <span class="tech-tag">Google Maps API</span>
-                </div>
-                <div class="project-links">
-                   
-                    <a href="https://github.com/Antrax-inhaler/-PHP--Multi-Tenant-Crop-Farm-Management-System-with-Integrated-Analytics-and-Mapping-Features" target="_blank">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                </div>
             </div>
         </div>
-        
-        <!-- Project 2 - Payroll System -->
-        <div class="project-card">
+    </section>
+
+    <!-- Mini Projects Section -->
+    <section class="section" id="mini-projects">
+        <h2 class="section-title">Mini Projects & Templates</h2>
+        <div class="container">
+            <div class="projects-grid">
+                <div class="project-card animate-on-scroll">
             <div class="project-image-container">
-                <img src="payroll/slide1.png" alt="Payroll Dashboard" class="project-image primary">
-                <img src="payroll/slide2.png" alt="Employee Management" class="project-image secondary">
-                <img src="payroll/slide3.png" alt="Salary Computation" class="project-image secondary">
-                <img src="payroll/slide4.png" alt="Payslip Generation" class="project-image secondary">
-                                <img src="payroll/slide5.png" alt="Payslip Generation" class="project-image secondary">
+                <img src="wordquest/slide1.png" alt="Word Quest Gameplay" class="project-image primary">
             </div>
             <div class="project-info">
-                <h3>Payroll System</h3>
-                <p>A reliable payroll system for accurate employee compensation with automated salary computation, tax deductions, and leave balances.</p>
+                <h3>Word Quest – Interactive Word Game</h3>
+                <p>
+                    A browser-based word challenge game with multiple difficulty levels, powerups, and real-time feedback. 
+                    Players guess missing letters before the timer runs out, unlocking hints, time boosts, and reveal options. 
+                    Featuring <strong>text-to-speech</strong> for accessibility, API-powered definitions for hints, and a 
+                    dynamic scoring system with level progression.
+                </p>
                 <div class="project-tech">
-                    <span class="tech-tag">C#</span>
-                    <span class="tech-tag">.NET MVC</span>
-                    <span class="tech-tag">SQL Server</span>
-                    <span class="tech-tag">Crystal Reports</span>
-                </div>
-                <div class="project-links">
-                   
-                    <a href="https://github.com/Antrax-Inhaler/Payroll-Management-System---C--net" target="_blank">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Project 3 - HRIS -->
-        <div class="project-card">
-            <div class="project-image-container">
-                <img src="hrms/slide1.png" alt="HRIS Dashboard" class="project-image primary">
-                <img src="hrms/slide2.png" alt="Employee Profiles" class="project-image secondary">
-                <img src="hrms/slide3.png" alt="Attendance Tracking" class="project-image secondary">
-                <img src="hrms/slide4.png" alt="Payroll Processing" class="project-image secondary">
-                <img src="hrms/slide5.png" alt="Recruitment Portal" class="project-image secondary">
-                <img src="hrms/slide6.png" alt="Reports" class="project-image secondary">
-                <img src="hrms/slide7.png" alt="Mobile View" class="project-image secondary">
-            </div>
-            <div class="project-info">
-                <h3>Integrated HRIS</h3>
-                <p>A unified HR platform supporting multi-type payroll processing, fingerprint biometric attendance tracking, and job portal with automatic PDS generation.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">Laravel</span>
                     <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">HTML5</span>
+                    <span class="tech-tag">CSS3</span>
+                    <span class="tech-tag">Web Speech API</span>
                     <span class="tech-tag">REST API</span>
                 </div>
                 <div class="project-links">
-                   
-                    <a href="https://github.com/Antrax-Inhaler/Integrated-HRIS-with-Multi-Payroll-Processing-Biometric-Attendance-and-Recruitment-Portal" target="_blank">
-                        <i class="fab fa-github"></i> GitHub
+                    <a href="https://word-game-saga.netlify.app/" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Play Demo
                     </a>
                 </div>
             </div>
         </div>
-        
-        <!-- Project 4 - Cemetery -->
-        <div class="project-card">
-            <div class="project-image-container">
-                <img src="cemetery/slide1.png" alt="Cemetery Dashboard" class="project-image primary">
-                <img src="cemetery/slide2.png" alt="Plot Management" class="project-image secondary">
-                <img src="cemetery/slide3.png" alt="Interactive Map" class="project-image secondary">
-                <img src="cemetery/slide4.png" alt="Appointments" class="project-image secondary">
-            </div>
-            <div class="project-info">
-                <h3>Cemetery Management System</h3>
-                <p>A user-friendly system with interactive map layout for plots, plot reservations, appointment scheduling, and cemetery block management.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">Laravel</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">Google Calendar API</span>
-                    <span class="tech-tag">CSS3</span>
+                <!-- Petopia Template -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="petopia/slide1.png" alt="Petopia Template" class="project-image primary">
+                        <img src="petopia/slide2.png" alt="Petopia Services Section" class="project-image secondary">
+                        <img src="petopia/slide3.png" alt="Petopia Adoption Gallery" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>Petopia – Premium Pet Business Template</h3>
+                        <p>A high-conversion website template for pet businesses, shelters, and veterinarians with modern aesthetics and fluid animations.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">GSAP</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://petopia1.netlify.app/" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-links">
-                  
-                    <a href="https://github.com/Antrax-Inhaler/Interactive-Cemetery-Management-System-with-Plot-Reservation-and-Appointment-Scheduling-Laravel-" target="_blank">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Project 5 - Alumni Tracker -->
-        <div class="project-card">
-            <div class="project-image-container">
-                <img src="alumni/slide1.png" alt="Alumni Dashboard" class="project-image primary">
-                <img src="alumni/slide2.png" alt="User Profiles" class="project-image secondary">
-                <img src="alumni/slide3.png" alt="Geographical View" class="project-image secondary">
-                <img src="alumni/slide4.png" alt="Social Features" class="project-image secondary">
-                <img src="alumni/slide5.png" alt="Mobile App" class="project-image secondary">
-                <img src="alumni/slide6.png" alt="Analytics" class="project-image secondary">
-            </div>
-            <div class="project-info">
-                <h3>Alumni Tracker with Social Media</h3>
-                <p>A social web platform to connect alumni and track their career paths and locations with geographical insights into alumni distribution.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">Laravel</span>
-                    <span class="tech-tag">Vue.js</span>
-                    <span class="tech-tag">Inertia.js</span>
-                    <span class="tech-tag">Google Maps API</span>
-                </div>
-                <div class="project-links">
-                  
-                    <a href="https://github.com/Antrax-Inhaler/eTraCCS_Alumni" target="_blank">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                </div>
-            </div>
-        </div>
-         <div class="project-card">
+    <div class="project-card animate-on-scroll">
         <div class="project-image-container">
-            <!-- Replace these with actual screenshots when available -->
-            <img src="fitness-tracker/slide1.png" alt="Alumni Dashboard" class="project-image primary">
-                <img src="fitness-tracker/slide2.png" alt="User Profiles" class="project-image secondary">
+            <img src="petopia2/slide1.png" alt="Petopia 2 Homepage" class="project-image primary">
+            <img src="petopia2/slide2.png" alt="Petopia 2 Services Section" class="project-image secondary">
+            <img src="petopia2/slide3.png" alt="Petopia 2 Adoption Gallery" class="project-image secondary">
         </div>
         <div class="project-info">
-            <h3>Fitness Tracker & Meal Planner</h3>
-            <p>A full-stack web application for tracking meals, workouts, and nutrition with personalized dashboards, calorie tracking, and progress analytics. Features secure user authentication and responsive design.</p>
+            <h3>Petopia 2 – Next-Gen Pet Business Template</h3>
+            <p>
+                An upgraded version of the original Petopia, this premium template is designed for pet shops, shelters, 
+                adoption centers, and veterinarians. Petopia 2 brings enhanced performance, sleek modern UI, 
+                engaging micro-interactions, and smoother animations for a richer user experience.
+            </p>
             <div class="project-tech">
-                <span class="tech-tag">ASP.NET Core</span>
-                <span class="tech-tag">React</spc:\Users\Acer\Videos\Captures\React App - Google Chrome 28_08_2025 1_09_02 pm.png c:\Users\Acer\Videos\Captures\React App - Google Chrome 28_08_2025 1_08_53 pm.pngan>
-                <span class="tech-tag">TypeScript</span>
-                <span class="tech-tag">SQL Server</span>
-                <span class="tech-tag">Entity Framework</span>
-                <span class="tech-tag">Bootstrap</span>
+                <span class="tech-tag">HTML5</span>
+                <span class="tech-tag">CSS3</span>
+                <span class="tech-tag">JavaScript</span>
+                <span class="tech-tag">GSAP Animations</span>
+                <span class="tech-tag">Responsive Design</span>
             </div>
             <div class="project-links">
-              
-                <a href="https://github.com/Antrax-Inhaler/fitness-planner" target="_blank">
-                    <i class="fab fa-github"></i> GitHub
+                <a href="#" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Live Demo
                 </a>
             </div>
         </div>
     </div>
-    </div>
-</section>
-<section class="section" id="mini-projects">
-    <h2 class="section-title">Mini Projects & Templates</h2>
-    
 
-    <div class="projects-grid">
-        <div class="project-card">
-    <div class="project-image-container">
-        <img src="wordquest/slide1.png" alt="Word Quest Gameplay" class="project-image primary">
-    </div>
-    <div class="project-info">
-        <h3>Word Quest – Interactive Word Game</h3>
-        <p>
-            A browser-based word challenge game with multiple difficulty levels, powerups, and real-time feedback. 
-            Players guess missing letters before the timer runs out, unlocking hints, time boosts, and reveal options. 
-            Featuring <strong>text-to-speech</strong> for accessibility, API-powered definitions for hints, and a 
-            dynamic scoring system with level progression.
-        </p>
-        <div class="project-tech">
-            <span class="tech-tag">JavaScript</span>
-            <span class="tech-tag">HTML5</span>
-            <span class="tech-tag">CSS3</span>
-            <span class="tech-tag">Web Speech API</span>
-            <span class="tech-tag">REST API</span>
-        </div>
-        <div class="project-links">
-            <a href="https://word-game-saga.netlify.app/" target="_blank">
-                <i class="fas fa-external-link-alt"></i> Play Demo
-            </a>
-        </div>
-    </div>
-</div>
-        <!-- Petopia Template -->
-        <div class="project-card">
+                <!-- EcoHealth Clinic Dashboard -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="ecohealth/slide1.png" alt="EcoHealth Dashboard" class="project-image primary">
+                        <img src="ecohealth/slide2.png" alt="EcoHealth Patient Management" class="project-image secondary">
+                        <img src="ecohealth/slide3.png" alt="EcoHealth Analytics" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>EcoHealth Clinic Admin Dashboard</h3>
+                        <p>A responsive admin UI template for healthcare platforms with intuitive clinic management interface.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">Chart.js</span>
+                            <span class="tech-tag">Responsive</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://healthclinicpatientmanagementforsale.netlify.app/" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card animate-on-scroll">
             <div class="project-image-container">
-                <img src="petopia/slide1.png" alt="Petopia Template" class="project-image primary">
-                <img src="petopia/slide2.png" alt="Petopia Services Section" class="project-image secondary">
-                <img src="petopia/slide3.png" alt="Petopia Adoption Gallery" class="project-image secondary">
+                <img src="pet-fashion/slide1.png" alt="Pawtique Pet Fashion Homepage" class="project-image primary">
+                <img src="pet-fashion/slide2.png" alt="Pawtique Product Showcase" class="project-image secondary">
+                <img src="pet-fashion/slide3.png" alt="Pawtique Mobile View" class="project-image secondary">
             </div>
             <div class="project-info">
-                <h3>Petopia – Premium Pet Business Template</h3>
-                <p>A high-conversion website template for pet businesses, shelters, and veterinarians with modern aesthetics and fluid animations.</p>
+                <h3>Pawtique - Premium Pet Fashion</h3>
+                <p>A responsive e-commerce website template for pet fashion brands featuring matching owner-pet outfits and accessories.</p>
                 <div class="project-tech">
                     <span class="tech-tag">HTML5</span>
                     <span class="tech-tag">CSS3</span>
                     <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">GSAP</span>
+                    <span class="tech-tag">Responsive Design</span>
+                    <span class="tech-tag">UI/UX</span>
                 </div>
                 <div class="project-links">
-                    <a href="https://petopia1.netlify.app/" target="_blank">
+                    <a href="" target="_blank">
                         <i class="fas fa-external-link-alt"></i> Live Demo
                     </a>
+                   
                 </div>
             </div>
         </div>
-<div class="project-card">
-    <div class="project-image-container">
-        <img src="petopia2/slide1.png" alt="Petopia 2 Homepage" class="project-image primary">
-        <img src="petopia2/slide2.png" alt="Petopia 2 Services Section" class="project-image secondary">
-        <img src="petopia2/slide3.png" alt="Petopia 2 Adoption Gallery" class="project-image secondary">
-    </div>
-    <div class="project-info">
-        <h3>Petopia 2 – Next-Gen Pet Business Template</h3>
-        <p>
-            An upgraded version of the original Petopia, this premium template is designed for pet shops, shelters, 
-            adoption centers, and veterinarians. Petopia 2 brings enhanced performance, sleek modern UI, 
-            engaging micro-interactions, and smoother animations for a richer user experience.
-        </p>
-        <div class="project-tech">
-            <span class="tech-tag">HTML5</span>
-            <span class="tech-tag">CSS3</span>
-            <span class="tech-tag">JavaScript</span>
-            <span class="tech-tag">GSAP Animations</span>
-            <span class="tech-tag">Responsive Design</span>
+                <!-- HEIC Converter Pro -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="heic-converter/slide1.png" alt="HEIC Converter Interface" class="project-image primary">
+                        <img src="heic-converter/slide1.png" alt="HEIC Converter Interface" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>HEIC Converter Pro</h3>
+                        <p>Browser-based HEIC/HEIF image converter with batch processing, EXIF stripping, and privacy-focused client-side conversion.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">File API</span>
+                            <span class="tech-tag">Web Workers</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://heictojpgconverterpro.netlify.app/" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                           
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recipe Roulette -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="recipe-roulette/slide1.png" alt="Recipe Roulette Main" class="project-image primary">
+                        <img src="recipe-roulette/slide2.png" alt="Recipe Display" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>Recipe Roulette</h3>
+                        <p>API-powered recipe generator that provides random cooking challenges with detailed instructions and saving functionality.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">API Integration</span>
+                            <span class="tech-tag">LocalStorage</span>
+                            <span class="tech-tag">CSS3</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://reciperoulettesite.netlify.app/" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                          
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Word Game Helper -->
+                <div class="project-card animate-on-scroll">
+                    <div class="project-image-container">
+                        <img src="word-game/slide1.png" alt="Word Game Helper Main" class="project-image primary">
+                        <img src="word-game/slide2.png" alt="Wordle Solver" class="project-image secondary">
+                        <img src="word-game/slide3.png" alt Crossword Helper" class="project-image secondary">
+                    </div>
+                    <div class="project-info">
+                        <h3>Word Game Helper</h3>
+                        <p>A privacy-focused toolkit for popular word games with solvers for Wordle, Crossword, Anagram, Spelling Bee, and Scrabble.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">Public APIs</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://wordgamehelper.netlify.app/" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="project-links">
-            <a href="#" target="_blank">
-                <i class="fas fa-external-link-alt"></i> Live Demo
-            </a>
-        </div>
-    </div>
-</div>
+    </section>
 
-        <!-- EcoHealth Clinic Dashboard -->
-        <div class="project-card">
-            <div class="project-image-container">
-                <img src="ecohealth/slide1.png" alt="EcoHealth Dashboard" class="project-image primary">
-                <img src="ecohealth/slide2.png" alt="EcoHealth Patient Management" class="project-image secondary">
-                <img src="ecohealth/slide3.png" alt="EcoHealth Analytics" class="project-image secondary">
-            </div>
-            <div class="project-info">
-                <h3>EcoHealth Clinic Admin Dashboard</h3>
-                <p>A responsive admin UI template for healthcare platforms with intuitive clinic management interface.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">React</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">Chart.js</span>
-                    <span class="tech-tag">Responsive</span>
-                </div>
-                <div class="project-links">
-                    <a href="https://healthclinicpatientmanagementforsale.netlify.app/" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Live Demo
-                    </a>
-                   
-                </div>
-            </div>
-        </div>
-        <div class="project-card">
-    <div class="project-image-container">
-        <img src="pet-fashion/slide1.png" alt="Pawtique Pet Fashion Homepage" class="project-image primary">
-        <img src="pet-fashion/slide2.png" alt="Pawtique Product Showcase" class="project-image secondary">
-        <img src="pet-fashion/slide3.png" alt="Pawtique Mobile View" class="project-image secondary">
-    </div>
-    <div class="project-info">
-        <h3>Pawtique - Premium Pet Fashion</h3>
-        <p>A responsive e-commerce website template for pet fashion brands featuring matching owner-pet outfits and accessories.</p>
-        <div class="project-tech">
-            <span class="tech-tag">HTML5</span>
-            <span class="tech-tag">CSS3</span>
-            <span class="tech-tag">JavaScript</span>
-            <span class="tech-tag">Responsive Design</span>
-            <span class="tech-tag">UI/UX</span>
-        </div>
-        <div class="project-links">
-            <a href="" target="_blank">
-                <i class="fas fa-external-link-alt"></i> Live Demo
-            </a>
-           
-        </div>
-    </div>
-</div>
-        <!-- HEIC Converter Pro -->
-        <div class="project-card">
-            <div class="project-image-container">
-                <img src="heic-converter/slide1.png" alt="HEIC Converter Interface" class="project-image primary">
-                <img src="heic-converter/slide1.png" alt="HEIC Converter Interface" class="project-image secondary">
-            </div>
-            <div class="project-info">
-                <h3>HEIC Converter Pro</h3>
-                <p>Browser-based HEIC/HEIF image converter with batch processing, EXIF stripping, and privacy-focused client-side conversion.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">File API</span>
-                    <span class="tech-tag">Web Workers</span>
-                </div>
-                <div class="project-links">
-                    <a href="https://heictojpgconverterpro.netlify.app/" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Live Demo
-                    </a>
-                   
-                </div>
-            </div>
-        </div>
-        
-        <!-- Recipe Roulette -->
-        <div class="project-card">
-            <div class="project-image-container">
-                <img src="recipe-roulette/slide1.png" alt="Recipe Roulette Main" class="project-image primary">
-                <img src="recipe-roulette/slide2.png" alt="Recipe Display" class="project-image secondary">
-            </div>
-            <div class="project-info">
-                <h3>Recipe Roulette</h3>
-                <p>API-powered recipe generator that provides random cooking challenges with detailed instructions and saving functionality.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">React</span>
-                    <span class="tech-tag">API Integration</span>
-                    <span class="tech-tag">LocalStorage</span>
-                    <span class="tech-tag">CSS3</span>
-                </div>
-                <div class="project-links">
-                    <a href="https://reciperoulettesite.netlify.app/" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Live Demo
-                    </a>
-                  
-                </div>
-            </div>
-        </div>
-        
-        <!-- Word Game Helper -->
-        <div class="project-card">
-            <div class="project-image-container">
-                <img src="word-game/slide1.png" alt="Word Game Helper Main" class="project-image primary">
-                <img src="word-game/slide2.png" alt="Wordle Solver" class="project-image secondary">
-                <img src="word-game/slide3.png" alt Crossword Helper" class="project-image secondary">
-            </div>
-            <div class="project-info">
-                <h3>Word Game Helper</h3>
-                <p>A privacy-focused toolkit for popular word games with solvers for Wordle, Crossword, Anagram, Spelling Bee, and Scrabble.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">Public APIs</span>
-                </div>
-                <div class="project-links">
-                    <a href="https://wordgamehelper.netlify.app/" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Live Demo
-                    </a>
-                   
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
     <!-- Experience Section -->
     <section class="section" id="experience">
         <h2 class="section-title">Experience & Education</h2>
-        <div class="timeline">
-            <!-- Experience 1 -->
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-date">Jan 2022 - Present</div>
-                <div class="timeline-content">
-                    <h3>Freelance Software Developer</h3>
-                    <p>Self-Employed / Independent Contractor</p>
-                    <ul>
-                        <li>Delivered high-quality software solutions on time and within budget</li>
-                        <li>Developed scalable applications that supported business growth</li>
-                        <li>Utilized cutting-edge technologies to enhance system performance and user experience</li>
-                        <li>Collaborated with clients to understand requirements and provide continuous improvements</li>
-                    </ul>
+        <div class="container">
+            <div class="timeline">
+                <!-- Experience 1 -->
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Jan 2022 - Present</div>
+                    <div class="timeline-content">
+                        <h3>Freelance Software Developer</h3>
+                        <p>Self-Employed / Independent Contractor</p>
+                        <ul>
+                            <li>Delivered high-quality software solutions on time and within budget</li>
+                            <li>Developed scalable applications that supported business growth</li>
+                            <li>Utilized cutting-edge technologies to enhance system performance and user experience</li>
+                            <li>Collaborated with clients to understand requirements and provide continuous improvements</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Education -->
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-date">2021 - 2025</div>
-                <div class="timeline-content">
-                    <h3>Bachelor of Science in Information Technology</h3>
-                    <p>Mindoro State University</p>
+                
+                <!-- Education -->
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2021 - 2025</div>
+                    <div class="timeline-content">
+                        <h3>Bachelor of Science in Information Technology</h3>
+                        <p>Mindoro State University</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -612,87 +1787,68 @@
     <!-- Contact Section -->
     <section class="section" id="contact">
         <h2 class="section-title">Get In Touch</h2>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>Contact Information</h3>
-                <div class="contact-details">
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
+        <div class="container">
+            <div class="contact-container">
+                <div class="contact-info animate-on-scroll">
+                    <h3>Contact Information</h3>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Phone</h4>
+                                <a href="tel:+639670829620">+63 967 082 9620</a>
+                            </div>
                         </div>
-                        <div class="contact-text">
-                            <h4>Phone</h4>
-                            <a href="tel:+639670829620">+63 967 082 9620</a>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <a href="mailto:jovenandrei0324@gmail.com">jovenandrei0324@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Location</h4>
+                                <p>Caimito St., Cembo, Taguig City, Philippines</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-text">
-                            <h4>Email</h4>
-                            <a href="mailto:jovenandrei0324@gmail.com">jovenandrei0324@gmail.com</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-text">
-                            <h4>Location</h4>
-                            <p>Caimito St., Cembo, Taguig City, Philippines</p>
-                        </div>
+                    
+                    <div class="contact-social">
+                        <a href="https://github.com/Antrax-Inhaler" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="www.linkedin.com/in/lagahit-joven-andrei-879a8b381"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://web.facebook.com/joven.andrei.lagahit"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
                 
-                <div class="contact-social">
-                    <a href="https://github.com/Antrax-Inhaler" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="www.linkedin.com/in/lagahit-joven-andrei-879a8b381"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://web.facebook.com/joven.andrei.lagahit"><i class="fab fa-facebook-f"></i></a>
+                <div class="contact-form animate-on-scroll">
+                    <form action="https://formspree.io/f/xwpqderr" method="POST">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
                 </div>
-            </div>
-            
-            <div class="contact-form">
-                <form  style="display: none;"  action="https://formspree.io/f/xwpqderr" method="POST" id="contactForm">
-
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" class="form-control" required></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Send Message</button>
-                </form>
-                <form   action="https://formspree.io/f/xwpqderr" method="POST">
-
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" class="form-control" required></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Send Message</button>
-                </form>
             </div>
         </div>
     </section>
@@ -701,7 +1857,8 @@
     <footer>
         <div class="footer-content">
             <div class="footer-links">
-                <a href="#about">About</a>
+                <a href="#home">Home</a>
+                <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
                 <a href="#experience">Experience</a>
                 <a href="#contact">Contact</a>
@@ -709,16 +1866,7 @@
             <p class="copyright">© 2023 Joven Andrei Lagahit. All rights reserved.</p>
         </div>
     </footer>
-<!-- <div class="splash-screen">
-    <div class="splash-content">
-        <img src="ako2.png" 
-             alt="Joven Andrei Lagahit" 
-             class="splash-image">
-        <h1 class="splash-title">Welcome!</h1>
-        <p class="splash-message">Thank you for visiting my portfolio</p>
-        <div class="splash-loader"></div>
-    </div>
-</div> -->
+
     <script>
         // Theme Toggle
         const themeToggle = document.getElementById('themeToggle');
@@ -728,19 +1876,40 @@
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark');
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            document.documentElement.setAttribute('data-theme', 'dark');
         }
         
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark');
             
-            // Update icon
+            // Update icon and data attribute
             if (body.classList.contains('dark')) {
                 themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
                 localStorage.setItem('theme', 'dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
             } else {
                 themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
                 localStorage.setItem('theme', 'light');
+                document.documentElement.setAttribute('data-theme', 'light');
             }
+        });
+        
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
         });
         
         // Smooth scrolling for navigation links
@@ -748,146 +1917,188 @@
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
         
-        // Form submission
-        const contactForm = document.getElementById('contactForm');
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Scroll progress bar
+        window.onscroll = function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
             
-            // Get form values
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
+            // Header shadow on scroll
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
             
-            // Here you would typically send this data to a server
-            // For demo purposes, we'll just log it and show an alert
-            console.log({ name, email, subject, message });
-            alert('Thank you for your message! I will get back to you soon.');
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
             
-            // Reset form
-            contactForm.reset();
-        });
-        
-        // Animate skill bars on scroll
-        const animateSkills = () => {
-            const skillBars = document.querySelectorAll('.skill-progress');
-            skillBars.forEach(bar => {
-                const width = bar.style.width;
-                bar.style.width = '0';
-                setTimeout(() => {
-                    bar.style.width = width;
-                }, 100);
+            // Animate on scroll
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                
+                // If element is in viewport
+                if(position.top < window.innerHeight && position.bottom >= 0) {
+                    element.classList.add('animated');
+                }
             });
         };
         
-        // Intersection Observer for animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    if (entry.target.id === 'about') {
-                        animateSkills();
-                    }
-                    entry.target.classList.add('animated');
+        // Back to top functionality
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Project image hover effect
+        document.querySelectorAll('.project-card').forEach(card => {
+            const images = card.querySelectorAll('.project-image');
+            const secondaryImages = card.querySelectorAll('.project-image.secondary');
+            let currentIndex = 0;
+            let intervalId = null;
+            
+            card.addEventListener('mouseenter', () => {
+                if (secondaryImages.length > 0) {
+                    // Show first secondary image immediately
+                    secondaryImages[currentIndex].style.opacity = 1;
+                    images[0].style.opacity = 0;
+                    
+                    // Start cycling
+                    intervalId = setInterval(() => {
+                        // Hide current image
+                        secondaryImages[currentIndex].style.opacity = 0;
+                        
+                        // Move to next image
+                        currentIndex = (currentIndex + 1) % secondaryImages.length;
+                        
+                        // Show next image
+                        secondaryImages[currentIndex].style.opacity = 1;
+                    }, 2000); // Change image every 2 seconds
                 }
             });
-        }, { threshold: 0.1 });
-        
-        // Observe sections
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
+            
+            card.addEventListener('mouseleave', () => {
+                // Stop the interval
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                }
+                
+                // Hide all secondary images
+                secondaryImages.forEach(img => {
+                    img.style.opacity = 0;
+                });
+                
+                // Show primary image
+                images[0].style.opacity = 1;
+                
+                // Reset to first image for next hover
+                currentIndex = 0;
+            });
         });
-        window.addEventListener('load', function() {
-    setTimeout(function() {
-        const splash = document.querySelector('.splash-screen');
-        splash.style.opacity = '0';
         
-        setTimeout(function() {
-            splash.style.display = 'none';
-        }, 1000);
-    }, 3000); // 3 seconds display time
-});
-contactForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    const submitBtn = this.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-    
-    try {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
+        // Create particles for background
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 5 and 20px
+                const size = Math.random() * 15 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration between 10 and 30s
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
         
-        const response = await fetch(this.action, {
-            method: this.method,
-            body: formData,
-            headers: {
-                'Accept': 'application/json'
+        // Initialize particles
+        createParticles();
+        
+        // Form submission handling
+        const contactForm = document.querySelector('.contact-form form');
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+                
+                const response = await fetch(this.action, {
+                    method: this.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('Thank you! Your message has been sent.');
+                    contactForm.reset();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                alert('Oops! There was a problem sending your message. Please try again later or email me directly at jovenandrei0324@gmail.com');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
             }
         });
         
-        if (response.ok) {
-            alert('Thank you! Your message has been sent.');
-            contactForm.reset();
-        } else {
-            throw new Error('Form submission failed');
-        }
-    } catch (error) {
-        alert('Oops! There was a problem sending your message. Please try again later or email me directly at jovenandrei0324@gmail.com');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-    }
-});
-document.querySelectorAll('.project-card').forEach(card => {
-    const images = card.querySelectorAll('.project-image');
-    const secondaryImages = card.querySelectorAll('.project-image.secondary');
-    let currentIndex = 0;
-    let intervalId = null;
-    
-    card.addEventListener('mouseenter', () => {
-        if (secondaryImages.length > 0) {
-            // Show first secondary image immediately
-            secondaryImages[currentIndex].style.opacity = 1;
-            
-            // Start cycling
-            intervalId = setInterval(() => {
-                // Hide current image
-                secondaryImages[currentIndex].style.opacity = 0;
+        // Initialize animations on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Animate elements that are already in view on page load
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
                 
-                // Move to next image
-                currentIndex = (currentIndex + 1) % secondaryImages.length;
-                
-                // Show next image
-                secondaryImages[currentIndex].style.opacity = 1;
-            }, 2000); // Change image every 2 seconds
-        }
-    });
-    
-    card.addEventListener('mouseleave', () => {
-        // Stop the interval
-        if (intervalId) {
-            clearInterval(intervalId);
-            intervalId = null;
-        }
-        
-        // Hide all secondary images
-        secondaryImages.forEach(img => {
-            img.style.opacity = 0;
+                // If element is in viewport
+                if(position.top < window.innerHeight && position.bottom >= 0) {
+                    element.classList.add('animated');
+                }
+            });
         });
-        
-        // Show primary image
-        card.querySelector('.project-image.primary').style.opacity = 1;
-        
-        // Reset to first image for next hover
-        currentIndex = 0;
-    });
-});
     </script>
 </body>
 </html>
