@@ -1167,7 +1167,170 @@
     vertical-align: middle;
     margin-right: 10px;
 }
+/* Quotation Section with Overlay */
+.quotation-section {
+    position: relative;
+    padding: 8rem 0;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
 
+.quotation-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.quotation-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.8);
+    transition: transform 0.8s ease;
+}
+
+.quotation-section:hover .quotation-bg-image {
+    transform: scale(1.05);
+}
+
+.image-overlay-dark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+    z-index: 1;
+}
+
+.quotation-content-overlay {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: white;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.quotation-icon-large {
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: 2rem;
+}
+
+.quotation-text-large {
+    font-size: 2rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    font-style: italic;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.quotation-author-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.author-name-overlay {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.author-title-overlay {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .quotation-content-overlay {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+    .quotation-text-large {
+        font-size: 1.8rem;
+    }
+    
+    .quotation-content-overlay {
+        padding: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .quotation-section {
+        min-height: 70vh;
+        padding: 6rem 0;
+    }
+    
+    .quotation-text-large {
+        font-size: 1.5rem;
+    }
+    
+    .quotation-content-overlay {
+        padding: 2rem;
+        margin: 0 1rem;
+    }
+    
+    .quotation-icon-large {
+        font-size: 3rem;
+    }
+    
+    .author-name-overlay {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .quotation-section {
+        min-height: 60vh;
+        padding: 4rem 0;
+    }
+    
+    .quotation-text-large {
+        font-size: 1.3rem;
+    }
+    
+    .quotation-content-overlay {
+        padding: 1.5rem;
+    }
+    
+    .quotation-icon-large {
+        font-size: 2.5rem;
+    }
+    
+    .author-name-overlay {
+        font-size: 1.1rem;
+    }
+    
+    .author-title-overlay {
+        font-size: 1rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -1222,7 +1385,7 @@
                         <a href="#projects" class="cta-button">
                             <i class="fas fa-briefcase"></i> View My Work
                         </a>
-                        <a href="Resume_ Joven_Andrei_R._Lagahit.pdf" download class="cta-button secondary">
+                        <a href="Joven Andrei Resume.pdf" download class="cta-button secondary">
                             <i class="fas fa-download"></i> Download Resume
                         </a>
                     </div>
@@ -1848,7 +2011,27 @@
         </div>
     </section>
 
-
+<!-- Add this after the Hero section -->
+<section class="section quotation-section" id="quotation">
+    <div class="quotation-background">
+        <img src="c1ebabd3-6dbd-4e91-9243-a98e87798fba.jpg" alt="Joven Andrei Lagahit" class="quotation-bg-image">
+        <div class="image-overlay-dark"></div>
+    </div>
+    <div class="container">
+        <div class="quotation-content-overlay animate-on-scroll">
+            <div class="quotation-icon-large">
+                <i class="fas fa-quote-left"></i>
+            </div>
+            <blockquote class="quotation-text-large">
+                "Programming isn't about what you know; it's about what you can figure out. Every challenge is an opportunity to grow, and every bug is a lesson in disguise. The code we write today builds the world of tomorrow."
+            </blockquote>
+            <div class="quotation-author-overlay">
+                <span class="author-name-overlay">Joven Andrei Lagahit</span>
+                <span class="author-title-overlay">Full-Stack Developer</span>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- Contact Section -->
     <section class="section" id="contact">
