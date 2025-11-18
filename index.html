@@ -1340,6 +1340,116 @@
         font-size: 1rem;
     }
 }
+        .skills-search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+        
+        .skills-search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 1rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .skills-search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .skills-search-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .no-results-message {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .skills-item.hidden {
+            display: none;
+        }
+        
+        /* Resume Modal Styles */
+        .resume-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .resume-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 90%;
+            background: var(--bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .resume-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .resume-modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .resume-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+            transition: var(--transition);
+        }
+        
+        .resume-modal-close:hover {
+            color: var(--primary);
+        }
+        
+        .resume-modal-body {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .resume-pdf {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
     </style>
 </head>
 <body>
@@ -1374,9 +1484,21 @@
             </button>
         </div>
     </header>
-
+<div class="resume-modal" id="resumeModal">
+        <div class="resume-modal-content">
+            <div class="resume-modal-header">
+                <div class="resume-modal-title">Joven Andrei Lagahit - Resume</div>
+                <button class="resume-modal-close" id="resumeModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="resume-modal-body">
+                <iframe src="Joven Andrei Resume.pdf" class="resume-pdf" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
     <!-- Hero Section -->
-    <section class="hero" id="home">
+ <section class="hero" id="home">
         <div class="particles-container" id="particles"></div>
         <div class="hero-container">
             <div class="hero-content">
@@ -1396,6 +1518,9 @@
                         </a>
                         <a href="Joven Andrei Resume.pdf" download class="cta-button secondary">
                             <i class="fas fa-download"></i> Download Resume
+                        </a>
+                        <a href="#" class="cta-button secondary" id="viewResumeBtn">
+                            <i class="fas fa-file-pdf"></i> View
                         </a>
                     </div>
                     
@@ -1427,125 +1552,149 @@
         </div>
     </section>
 
+
     <!-- Skills Section -->
-    <section class="section skills-section" id="skills">
+ <section class="section skills-section" id="skills">
         <h2 class="section-title">Technical Skills</h2>
         <div class="container">
-            <div class="skills-container">
+            <!-- Skills Search Bar -->
+            <div class="skills-search-container animate-on-scroll">
+                <input type="text" class="skills-search-input" id="skillsSearch" placeholder="Search skills...">
+                <i class="fas fa-search skills-search-icon"></i>
+            </div>
+            
+            <div class="skills-container" id="skillsContainer">
                 <!-- Programming Languages -->
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="php">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" class="skill-icon" alt="PHP">
                     <span class="skill-name">PHP</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="javascript">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="skill-icon" alt="JavaScript">
                     <span class="skill-name">JavaScript</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="csharp">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" class="skill-icon" alt="C#">
                     <span class="skill-name">C#</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="mysql">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" class="skill-icon" alt="MySQL">
                     <span class="skills-name">MySQL</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="sql server">
                     <img src="images/sql_server.png" class="skill-icon" alt="SQL Server">
                     <span class="skills-name">SQL Server</span>
                 </div>
                 
+                <!-- New: PostgreSQL -->
+                <div class="skills-item animate-on-scroll" data-skill="postgresql">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" class="skill-icon" alt="PostgreSQL">
+                    <span class="skill-name">PostgreSQL</span>
+                </div>
+                
+                <!-- New: Supabase -->
+                <div class="skills-item animate-on-scroll" data-skill="supabase">
+                    <img src="https://supabase.com/favicon/favicon-192x192.png" class="skill-icon" alt="Supabase">
+                    <span class="skill-name">Supabase</span>
+                </div>
+                
                 <!-- Frameworks -->
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="laravel">
                     <img src="images/Laravel.svg.png" class="skill-icon" alt="Laravel">
                     <span class="skill-name">Laravel</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="vue.js">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original-wordmark.svg" class="skill-icon" alt="Vue.js">
                     <span class="skill-name">Vue.js</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="react.js">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original-wordmark.svg" class="skill-icon" alt="React.js">
                     <span class="skill-name">React.js</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill=".net core">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original-wordmark.svg" class="skill-icon" alt=".NET Core">
                     <span class="skill-name">.NET Core</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="tailwind css">
                     <img src="images/Tailwind_CSS_Logo.svg.png" class="skill-icon" alt="Tailwind CSS">
                     <span class="skill-name">Tailwind CSS</span>
                 </div>
                 
                 <!-- Tools & APIs -->
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="git">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="skill-icon" alt="Git">
                     <span class="skill-name">Git</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="google maps api">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" class="skill-icon" alt="Google Maps API">
                     <span class="skill-name">Google Maps API</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="openweather api">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/OpenWeatherMap_logo.png" class="skill-icon" alt="OpenWeather API">
                     <span class="skill-name">OpenWeather API</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="gemini api">
                     <img src="https://cdn-icons-png.flaticon.com/512/2813/2813828.png" class="skill-icon" alt="Gemini API">
                     <span class="skill-name">Gemini API</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="crystal reports">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/crystal/crystal-original.svg" class="skill-icon" alt="Crystal Reports">
                     <span class="skill-name">Crystal Reports</span>
                 </div>
                 
                 <!-- Design Tools -->
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="photoshop">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" class="skill-icon" alt="Photoshop">
                     <span class="skill-name">Photoshop</span>
                 </div>
-                <div class="skills-item animate-on-scroll">
+                <div class="skills-item animate-on-scroll" data-skill="adobe flash">
                     <img src="images/Adobe_Flash_Professional_Icon.svg.png" class="skill-icon" alt="Adobe Flash">
                     <span class="skill-name">Adobe Flash</span>
                 </div>
-                 <div class="skills-item animate-on-scroll">
+                 <div class="skills-item animate-on-scroll" data-skill="materialize css">
                     <img src="images/Materialize.png" class="skill-icon" alt="Materialize">
                     <span class="skill-name">Materialize CSS</span>
                 </div>
                    <!-- TypeScript -->
-            <div class="skills-item animate-on-scroll">
+            <div class="skills-item animate-on-scroll" data-skill="typescript">
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" class="skill-icon" alt="TypeScript">
                 <span class="skill-name">TypeScript</span>
             </div>
             
             <!-- ASP.NET Core -->
-            <div class="skills-item animate-on-scroll">
+            <div class="skills-item animate-on-scroll" data-skill="asp.net core">
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg" class="skill-icon" alt="ASP.NET Core">
                 <span class="skill-name">ASP.NET Core</span>
             </div>
             
             <!-- Entity Framework -->
-            <div class="skills-item animate-on-scroll">
+            <div class="skills-item animate-on-scroll" data-skill="entity framework">
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original-wordmark.svg" class="skill-icon" alt="Entity Framework">
                 <span class="skill-name">Entity Framework</span>
             </div>
             
             <!-- Bootstrap -->
-            <div class="skills-item animate-on-scroll">
+            <div class="skills-item animate-on-scroll" data-skill="bootstrap">
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-plain-wordmark.svg" class="skill-icon" alt="Bootstrap">
                 <span class="skill-name">Bootstrap</span>
             </div>
             
             <!-- RESTful APIs -->
-            <div class="skills-item animate-on-scroll">
+            <div class="skills-item animate-on-scroll" data-skill="restful apis">
                 <img src="https://cdn-icons-png.flaticon.com/512/2164/2164832.png" class="skill-icon" alt="RESTful APIs">
                 <span class="skill-name">RESTful APIs</span>
             </div>
             
             <!-- JWT Authentication -->
-            <div class="skills-item animate-on-scroll">
+            <div class="skills-item animate-on-scroll" data-skill="jwt authentication">
                 <img src="https://jwt.io/img/pic_logo.svg" class="skill-icon" alt="JWT Authentication">
                 <span class="skill-name">JWT Authentication</span>
             </div>
+            </div>
+            
+            <!-- No Results Message -->
+            <div class="no-results-message" id="noResultsMessage">
+                No skills found matching your search.
             </div>
         </div>
     </section>
@@ -2399,6 +2548,64 @@
                     element.classList.add('animated');
                 }
             });
+        });
+         const skillsSearch = document.getElementById('skillsSearch');
+        const skillsItems = document.querySelectorAll('.skills-item');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        
+        skillsSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            let visibleCount = 0;
+            
+            skillsItems.forEach(item => {
+                const skillName = item.getAttribute('data-skill').toLowerCase();
+                
+                if (skillName.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            
+            // Show/hide no results message
+            if (visibleCount === 0 && searchTerm !== '') {
+                noResultsMessage.style.display = 'block';
+            } else {
+                noResultsMessage.style.display = 'none';
+            }
+        });
+        
+        // Resume Modal Functionality
+        const resumeModal = document.getElementById('resumeModal');
+        const viewResumeBtn = document.getElementById('viewResumeBtn');
+        const resumeModalClose = document.getElementById('resumeModalClose');
+        
+        viewResumeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            resumeModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+        
+        resumeModalClose.addEventListener('click', function() {
+            resumeModal.style.display = 'none';
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+        
+        // Close modal when clicking outside content
+        window.addEventListener('click', function(e) {
+            if (e.target === resumeModal) {
+                resumeModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && resumeModal.style.display === 'block') {
+                resumeModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
         });
     </script>
 
