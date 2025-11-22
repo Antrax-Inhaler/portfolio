@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
      <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
         <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DZQVVNG510"></script>
 <script>
@@ -59,6 +61,22 @@
             --glow: 0 0 5px var(--primary);
             --glow-secondary: 0 0 5px var(--secondary);
         }
+        
+        [data-theme="dark"] {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --secondary: #22d3ee;
+            --accent: #fb923c;
+            --text: #f3f4f6;
+            --text-light: #d1d5db;
+            --bg: #111827;
+            --bg-secondary: #1f2937;
+            --bg-tertiary: #374151;
+            --card-bg: #1f2937;
+            --border: #374151;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
 
         * {
             margin: 0;
@@ -91,7 +109,7 @@
 
         a {
             text-decoration: none;
-            color: inherit;
+            color: white;
         }
 
         ul {
@@ -237,7 +255,7 @@
             overflow: hidden;
             padding-top: 80px;
         }
-
+        
         .hero::before {
             content: '';
             position: absolute;
@@ -298,7 +316,6 @@
             animation: pulse 2s infinite reverse;
             box-shadow: var(--glow-secondary);
         }
-
         .my-name {
             font-size: 3.5rem;
             margin-bottom: 0.5rem;
@@ -1261,6 +1278,7 @@
         }
 
         @media (max-width: 768px) {
+            
             .header-container {
                 padding: 0 1rem;
             }
@@ -1354,6 +1372,21 @@
             
             .skills-container {
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+                       .business-card-container-3d {
+                height: 550px;
+            }
+            
+             .card-front, .card-back {
+                padding: 1.5rem;
+            }
+            
+            .card-name {
+                font-size: 1.8rem;
+            }
+            
+            .card-title {
+                font-size: 1.1rem;
             }
         }
 
@@ -1657,7 +1690,330 @@
             height: 100%;
             border: none;
         }
-        
+          /* 3D Business Card Styles */
+        .business-card-container-3d {
+            perspective: 1500px;
+            width: 100%;
+            max-width: 700px;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        .business-card-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        .business-card-3d.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+            transform: rotateY(180deg);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-name-title {
+            flex: 1;
+        }
+
+        .card-name {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 1rem;
+            color: var(--text-light);
+            opacity: 0.8;
+        }
+
+        .profile-image-small {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+            object-fit: cover;
+        }
+
+        .card-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+            flex-shrink: 0;
+        }
+
+        .contact-text h4 {
+            margin-bottom: 0.3rem;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .contact-text a, .contact-text p {
+            color: var(--text-light);
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .contact-text a:hover {
+            color: var(--primary);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-social {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: var(--bg);
+            transform: translateY(-3px);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+
+        .flip-instruction {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn {
+            background: var(--primary);
+            color: var(--bg);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        .download-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.4);
+        }
+
+        /* Back of card styles */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-category h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+        }
+
+        .skill-tag {
+            background: var(--bg);
+            color: var(--text);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            border: 1px solid var(--border);
+        }
+
+        .about-me {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-me h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .about-me p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .availability {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .availability-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 5px var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        /* Card decorative elements */
+        .card-decoration {
+            position: absolute;
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.1;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .decoration-2 {
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--secondary);
+            opacity: 0.1;
+            box-shadow: 0 0 20px var(--secondary);
+        }
+        /* Style for the front download button */
+.download-front {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+.download-front:hover {
+    background: var(--primary);
+    color: var(--bg);
+    transform: translateZ(20px) translateY(-3px) scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.5);
+}
+
+/* Modified download button style for icon only */
+.download-btn {
+    background: var(--primary);
+    color: var(--bg);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    transform: translateZ(25px);
+}
+
+.download-btn:hover {
+    background: var(--primary-dark);
+    transform: translateZ(25px) translateY(-3px) scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.4);
+}
     </style>
 </head>
 <body>
@@ -1713,7 +2069,8 @@
                 <div class="hero-text">
                     <h1 class="my-name">Joven Andrei Lagahit</h1>
                     <h2>Full-Stack Developer</h2>
-                    <p class="hero-description">Passionate developer with hands-on experience in building scalable, real-world web and desktop applications. Strong in API integration, data visualization, and system design. Currently seeking opportunities to apply technical skills in impactful software development roles.</p>
+                    <p class="hero-description">If you're looking for a developer who can turn complex ideas into smooth, scalable, and user-friendly applications, you’re in the right place. I specialize in building real-world web and desktop systems, integrating APIs, designing efficient architectures, and creating data-driven features that solve real problems.
+Feel free to explore my portfolio. Every project reflects the skills, dedication, and quality I bring to every work opportunity</p>
                     
                     <div class="hero-education">
                         <i class="fas fa-graduation-cap"></i>
@@ -2182,6 +2539,152 @@
         </div>
     </div>
 </section>
+    <section class="section hero" id="card-section">
+        
+        <div class="particles-container" id="particles"></div>
+        <div class="hero-container">
+            <div class="business-card-container-3d">
+                <div class="business-card-3d" id="businessCard">
+<!-- Front of the card -->
+<div class="card-front">
+    <div class="card-decoration decoration-1"></div>
+    <div class="card-decoration decoration-2"></div>
+    
+    <div class="card-header">
+        <div class="card-name-title">
+            <h1 class="card-name">Joven Andrei Lagahit</h1>
+            <p class="card-title">Full-Stack Developer</p>
+            <p class="card-subtitle">Web & Desktop Applications</p>
+        </div>
+        <img src="ako2.png" alt="Joven Andrei Lagahit" class="profile-image-small">
+    </div>
+    
+    <div class="card-body">
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+            </div>
+            <div class="contact-text">
+                <h4>Phone</h4>
+                <a href="tel:+639670829620">+63 967 082 9620</a>
+            </div>
+        </div>
+        
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text">
+                <h4>Email</h4>
+                <a href="mailto:jovenandrei0324@gmail.com">jovenandrei0324@gmail.com</a>
+            </div>
+        </div>
+        
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-text">
+                <h4>Location</h4>
+                <p>Makati City, Philippines</p>
+            </div>
+        </div>
+        
+        <div class="contact-item">
+            <div class="contact-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="contact-text">
+                <h4>Education</h4>
+                <p>BS Information Technology</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-footer">
+        <div class="card-social">
+            <a href="https://github.com/Antrax-Inhaler" target="_blank" class="social-link">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="www.linkedin.com/in/lagahit-joven-andrei-879a8b381" class="social-link">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="mailto:jovenandrei0324@gmail.com" class="social-link">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <!-- Added download button on front -->
+            <button class="social-link download-front" id="downloadCardFront">
+                <i class="fas fa-download"></i>
+            </button>
+        </div>
+        
+        <div class="flip-instruction">
+            <i class="fas fa-sync-alt"></i>
+            <span>Click to flip</span>
+        </div>
+    </div>
+</div>
+<!-- Back of the card -->
+<div class="card-back">
+    <div class="card-decoration decoration-1"></div>
+    <div class="card-decoration decoration-2"></div>
+    
+    <div class="availability">
+        <div class="availability-dot"></div>
+        <span>Available for new opportunities</span>
+    </div>
+    
+    <div class="about-me">
+        <h4>About Me</h4>
+        <p>Passionate full-stack developer with hands-on experience in building scalable web and desktop applications. Strong in API integration, data visualization, and system design.</p>
+    </div>
+    
+    <div class="skills-grid">
+        <div class="skill-category">
+            <h4>Frontend</h4>
+            <div class="skill-list">
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Vue.js</span>
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Tailwind CSS</span>
+            </div>
+        </div>
+        
+        <div class="skill-category">
+            <h4>Backend</h4>
+            <div class="skill-list">
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">C#</span>
+                <span class="skill-tag">.NET Core</span>
+            </div>
+        </div>
+        
+        <div class="skill-category">
+            <h4>Database</h4>
+            <div class="skill-list">
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">SQL Server</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-footer">
+        <!-- Modified download button on back - icon only -->
+        <button class="download-btn" id="downloadCard">
+            <i class="fas fa-download"></i>
+        </button>
+        
+        <div class="flip-instruction">
+            <i class="fas fa-sync-alt"></i>
+            <span>Click to flip back</span>
+        </div>
+    </div>
+</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Mini Projects Section -->
     <section class="section" id="mini-projects">
@@ -2521,7 +3024,7 @@
                 <a href="#experience">Experience</a>
                 <a href="#contact">Contact</a>
             </div>
-            <p class="copyright">© 2023 Joven Andrei Lagahit. All rights reserved.</p>
+            <p class="copyright">© 2025 Joven Andrei Lagahit. All rights reserved.</p>
         </div>
     </footer>
 
@@ -2815,6 +3318,45 @@
                 document.body.style.overflow = '';
             }
         });
+      // 3D Business Card Flip Functionality
+const businessCard = document.getElementById('businessCard');
+
+businessCard.addEventListener('click', function() {
+    this.classList.toggle('flipped');
+});
+
+// Prevent card flip when clicking on interactive elements
+document.querySelectorAll('.social-link, .download-btn, .download-front').forEach(element => {
+    element.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent card flip when clicking these elements
+    });
+});
+
+// Download Card Functionality for both buttons
+const downloadCardBtn = document.getElementById('downloadCard');
+const downloadCardFrontBtn = document.getElementById('downloadCardFront');
+
+function downloadBusinessCard() {
+    // Capture the business card as an image
+    html2canvas(businessCard, {
+        scale: 2, // Higher quality
+        backgroundColor: null // Transparent background
+    }).then(canvas => {
+        // Convert canvas to image
+        const image = canvas.toDataURL("image/png");
+        
+        // Create download link
+        const link = document.createElement('a');
+        link.download = 'joven-andrei-lagahit-business-card.png';
+        link.href = image;
+        link.click();
+    });
+}
+
+// Add event listeners to both download buttons
+downloadCardBtn.addEventListener('click', downloadBusinessCard);
+downloadCardFrontBtn.addEventListener('click', downloadBusinessCard);
+
     </script>
 
 </body>
