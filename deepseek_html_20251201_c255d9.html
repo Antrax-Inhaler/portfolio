@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Showcase</title>
+    <style>
+        :root {
+            --primary: #00ff41;
+            --primary-dark: #00cc33;
+            --secondary: #9d4edd;
+            --secondary-dark: #7b2cbf;
+            --accent: #ff00ff;
+            --text: #e0e0e0;
+            --text-light: #b0b0b0;
+            --bg: #0a0a0a;
+            --bg-secondary: #121212;
+            --bg-tertiary: #1a1a1a;
+            --card-bg: rgba(18, 18, 18, 0.8);
+            --border: rgba(0, 255, 65, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.8), 0 2px 4px -1px rgba(0, 0, 0, 0.6);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.9), 0 4px 6px -2px rgba(0, 0, 0, 0.7);
+            --transition: all 0.3s ease;
+            --transition-slow: all 0.5s ease;
+            --radius: 12px;
+            --max-width: 1200px;
+            --glow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary);
+            --glow-secondary: 0 0 10px var(--secondary), 0 0 20px var(--secondary), 0 0 30px var(--secondary);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .projects-showcase {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .project-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: none;
+        }
+
+        .project-section.active {
+            display: block;
+        }
+
+        .project-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .project-background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .project-background-image.active {
+            opacity: 1;
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.7) 0%,
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0.7) 100%
+            );
+            z-index: 2;
+        }
+
+        .project-content {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .project-title {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-shadow: var(--glow);
+        }
+
+        .project-description {
+            max-width: 800px;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tech-tag {
+            background: var(--card-bg);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            background: var(--primary);
+            color: var(--bg);
+            text-decoration: none;
+            box-shadow: var(--glow);
+        }
+
+        .project-link:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .testimonial-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .testimonial-bubble {
+            position: absolute;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1rem;
+            max-width: 300px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: auto;
+        }
+
+        .testimonial-bubble.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .expand-button {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--bg-secondary);
+            border: none;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .expand-button:hover {
+            background: var(--bg-tertiary);
+            box-shadow: 0 -5px 15px rgba(0, 255, 65, 0.2);
+        }
+
+        .expand-button i {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-button.expanded i {
+            transform: rotate(180deg);
+        }
+
+        /* Animation for floating bubbles */
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-10px) translateX(5px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2.2rem;
+            }
+            
+            .project-description {
+                font-size: 1rem;
+            }
+            
+            .testimonial-bubble {
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-title {
+                font-size: 1.8rem;
+            }
+            
+            .project-links {
+                flex-direction: column;
+            }
+            
+            .testimonial-bubble {
+                max-width: 200px;
+                padding: 0.8rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <section class="projects-showcase" id="projects-showcase">
+        <!-- Project 1 -->
+        <div class="project-section active" id="project-1">
+            <div class="project-background">
+                <img src="agronet/slide1.png" alt="Agronet Dashboard" class="project-background-image active">
+                <img src="agronet/slide2.png" alt="Agronet Analytics" class="project-background-image">
+                <img src="agronet/slide3.png" alt="Agronet Mapping" class="project-background-image">
+                <img src="agronet/slide4.png" alt="Agronet Reports" class="project-background-image">
+                <img src="agronet/slide5.png" alt="Agronet Admin" class="project-background-image">
+                <img src="agronet/slide6.png" alt="Agronet Mobile" class="project-background-image">
+            </div>
+            <div class="project-overlay"></div>
+            
+            <div class="project-content">
+                <h2 class="project-title">Multi-Tenant Crop Farm Management System</h2>
+                <p class="project-description">
+                    A scalable system supporting multiple user types in the agriculture sector with AI-driven crop analysis and real-time weather forecasting.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">PHP</span>
+                    <span class="tech-tag">AJAX</span>
+                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">Gemini API</span>
+                    <span class="tech-tag">Google Maps API</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/Antrax-inhaler/-PHP--Multi-Tenant-Crop-Farm-Management-System-with-Integrated-Analytics-and-Mapping-Features" target="_blank" class="project-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            
+            <div class="testimonial-bubbles">
+                <div class="testimonial-bubble active floating" style="top: 20%; left: 10%;">
+                    <p class="testimonial-text">"This system revolutionized how we manage our farm operations."</p>
+                    <p class="testimonial-author">- Farm Manager</p>
+                </div>
+                <div class="testimonial-bubble active floating" style="top: 60%; right: 15%;">
+                    <p class="testimonial-text">"The analytics provided insights we never had before."</p>
+                    <p class="testimonial-author">- Agricultural Analyst</p>
+                </div>
+                <div class="testimonial-bubble active floating" style="bottom: 30%; left: 20%;">
+                    <p class="testimonial-text">"User-friendly interface with powerful features."</p>
+                    <p class="testimonial-author">- Farm Technician</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project 2 (Hidden initially) -->
+        <div class="project-section" id="project-2">
+            <div class="project-background">
+                <img src="payroll/slide1.png" alt="Payroll Dashboard" class="project-background-image active">
+                <img src="payroll/slide2.png" alt="Employee Management" class="project-background-image">
+                <img src="payroll/slide3.png" alt="Salary Computation" class="project-background-image">
+                <img src="payroll/slide4.png" alt="Payslip Generation" class="project-background-image">
+                <img src="payroll/slide5.png" alt="Payslip Generation" class="project-background-image">
+            </div>
+            <div class="project-overlay"></div>
+            
+            <div class="project-content">
+                <h2 class="project-title">Payroll System</h2>
+                <p class="project-description">
+                    A reliable payroll system for accurate employee compensation with automated salary computation, tax deductions, and leave balances.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">C#</span>
+                    <span class="tech-tag">.NET MVC</span>
+                    <span class="tech-tag">SQL Server</span>
+                    <span class="tech-tag">Crystal Reports</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/Antrax-Inhaler/Payroll-Management-System---C--net" target="_blank" class="project-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            
+            <div class="testimonial-bubbles">
+                <div class="testimonial-bubble active floating" style="top: 15%; right: 10%;">
+                    <p class="testimonial-text">"Streamlined our payroll process significantly."</p>
+                    <p class="testimonial-author">- HR Manager</p>
+                </div>
+                <div class="testimonial-bubble active floating" style="top: 50%; left: 10%;">
+                    <p class="testimonial-text">"Accurate calculations and easy to use."</p>
+                    <p class="testimonial-author">- Payroll Specialist</p>
+                </div>
+                <div class="testimonial-bubble active floating" style="bottom: 25%; right: 20%;">
+                    <p class="testimonial-text">"Reduced payroll processing time by 60%."</p>
+                    <p class="testimonial-author">- Finance Director</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project 3 (Hidden initially) -->
+        <div class="project-section" id="project-3">
+            <div class="project-background">
+                <img src="hrms/slide1.png" alt="HRIS Dashboard" class="project-background-image active">
+                <img src="hrms/slide2.png" alt="Employee Profiles" class="project-background-image">
+                <img src="hrms/slide3.png" alt="Attendance Tracking" class="project-background-image">
+                <img src="hrms/slide4.png" alt="Payroll Processing" class="project-background-image">
+                <img src="hrms/slide5.png" alt="Recruitment Portal" class="project-background-image">
+                <img src="hrms/slide6.png" alt="Reports" class="project-background-image">
+                <img src="hrms/slide7.png" alt="Mobile View" class="project-background-image">
+            </div>
+            <div class="project-overlay"></div>
+            
+            <div class="project-content">
+                <h2 class="project-title">Integrated HRIS</h2>
+                <p class="project-description">
+                    A unified HR platform supporting multi-type payroll processing, fingerprint biometric attendance tracking, and job portal with automatic PDS generation.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Laravel</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">REST API</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/Antrax-Inhaler/Integrated-HRIS-with-Multi-Payroll-Processing-Biometric-Attendance-and-Recruitment-Portal" target="_blank" class="project-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            
+            <div class="testimonial-bubbles">
+                <div class="testimonial-bubble active floating" style="top: 20%; left: 15%;">
+                    <p class="testimonial-text">"Comprehensive solution for all HR needs."</p>
+                    <p class="testimonial-author">- HR Director</p>
+                </div>
+                <div class="testimonial-bubble active floating" style="top: 60%; right: 10%;">
+                    <p class="testimonial-text">"Biometric integration improved accuracy."</p>
+                    <p class="testimonial-author">- IT Manager</p>
+                </div>
+                <div class="testimonial-bubble active floating" style="bottom: 30%; left: 25%;">
+                    <p class="testimonial-text">"Recruitment portal made hiring so much easier."</p>
+                    <p class="testimonial-author">- Talent Acquisition</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Expand Button -->
+        <button class="expand-button" id="expand-button">
+            <span>Show More Projects</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+    </section>
+
+    <script>
+        // Project data
+        const projects = [
+            {
+                id: 'project-1',
+                title: 'Multi-Tenant Crop Farm Management System',
+                description: 'A scalable system supporting multiple user types in the agriculture sector with AI-driven crop analysis and real-time weather forecasting.',
+                tech: ['PHP', 'AJAX', 'MySQL', 'Gemini API', 'Google Maps API'],
+                github: 'https://github.com/Antrax-inhaler/-PHP--Multi-Tenant-Crop-Farm-Management-System-with-Integrated-Analytics-and-Mapping-Features',
+                images: [
+                    'agronet/slide1.png',
+                    'agronet/slide2.png',
+                    'agronet/slide3.png',
+                    'agronet/slide4.png',
+                    'agronet/slide5.png',
+                    'agronet/slide6.png'
+                ]
+            },
+            {
+                id: 'project-2',
+                title: 'Payroll System',
+                description: 'A reliable payroll system for accurate employee compensation with automated salary computation, tax deductions, and leave balances.',
+                tech: ['C#', '.NET MVC', 'SQL Server', 'Crystal Reports'],
+                github: 'https://github.com/Antrax-Inhaler/Payroll-Management-System---C--net',
+                images: [
+                    'payroll/slide1.png',
+                    'payroll/slide2.png',
+                    'payroll/slide3.png',
+                    'payroll/slide4.png',
+                    'payroll/slide5.png'
+                ]
+            },
+            {
+                id: 'project-3',
+                title: 'Integrated HRIS',
+                description: 'A unified HR platform supporting multi-type payroll processing, fingerprint biometric attendance tracking, and job portal with automatic PDS generation.',
+                tech: ['Laravel', 'JavaScript', 'MySQL', 'REST API'],
+                github: 'https://github.com/Antrax-Inhaler/Integrated-HRIS-with-Multi-Payroll-Processing-Biometric-Attendance-and-Recruitment-Portal',
+                images: [
+                    'hrms/slide1.png',
+                    'hrms/slide2.png',
+                    'hrms/slide3.png',
+                    'hrms/slide4.png',
+                    'hrms/slide5.png',
+                    'hrms/slide6.png',
+                    'hrms/slide7.png'
+                ]
+            }
+        ];
+
+        // DOM elements
+        const expandButton = document.getElementById('expand-button');
+        const projectSections = document.querySelectorAll('.project-section');
+        let visibleProjects = 1;
+
+        // Expand button functionality
+        expandButton.addEventListener('click', function() {
+            if (visibleProjects < projectSections.length) {
+                // Show next project
+                projectSections[visibleProjects].classList.add('active');
+                visibleProjects++;
+                
+                // Update button text if all projects are visible
+                if (visibleProjects === projectSections.length) {
+                    expandButton.innerHTML = '<span>All Projects Shown</span><i class="fas fa-chevron-down"></i>';
+                }
+            }
+            
+            // Scroll to the newly revealed project
+            projectSections[visibleProjects - 1].scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Background image rotation for each project
+        projectSections.forEach(section => {
+            const backgroundImages = section.querySelectorAll('.project-background-image');
+            let currentImageIndex = 0;
+            
+            // Set initial active image
+            backgroundImages[currentImageIndex].classList.add('active');
+            
+            // Rotate images every 5 seconds
+            setInterval(() => {
+                // Hide current image
+                backgroundImages[currentImageIndex].classList.remove('active');
+                
+                // Move to next image
+                currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+                
+                // Show next image
+                backgroundImages[currentImageIndex].classList.add('active');
+            }, 5000);
+        });
+
+        // Testimonial bubbles animation
+        document.querySelectorAll('.testimonial-bubble').forEach(bubble => {
+            // Random delay for animation
+            const randomDelay = Math.random() * 2;
+            bubble.style.animationDelay = `${randomDelay}s`;
+        });
+    </script>
+</body>
+</html>
