@@ -3308,12 +3308,12 @@ downloadCardFrontBtn.addEventListener('click', downloadBusinessCard);
 <script>
 // Simple Portfolio Redirect Mechanism
 (function() {
-    const PORTFOLIO_PAGE = '/portfolio.html';
+    const PORTFOLIO_PAGE = '/index-origin.html';
     const STORAGE_KEY = 'portfolio_lock';
     
     // Check if current page is portfolio
     const isPortfolio = window.location.pathname.includes('portfolio') || 
-                       window.location.pathname.endsWith('/portfolio.html');
+                       window.location.pathname.endsWith('/index-origin.html');
     
     // Check if user has visited portfolio before
     const hasVisitedPortfolio = localStorage.getItem(STORAGE_KEY);
