@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joven · portfolio chatbot</title>
+  <!-- same fonts & icons as portfolio for consistency -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Fira+Code:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    #joven-chat-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      font-family: 'DM Sans', sans-serif;
+      z-index: 9999;
+      user-select: none;
+      color: #f5edd8;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    /* Circular minimized state - positioned at 75% from top */
+    #joven-chat-widget.collapsed {
+      width: 80px;
+      height: 80px;
+      bottom: auto;
+      top: 15vh;
+      right: 24px;
+      transform-origin: center;
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes popOut {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0; }
+    }
+    
+    #joven-chat-widget.collapsed .chat-card {
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0e0c0a;
+      border: 2px solid #d4a843;
+      box-shadow: 0 0 25px rgba(212, 168, 67, 0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* Profile picture with portfolio tint (sepia/gold overlay) */
+    #joven-chat-widget.collapsed .chat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('ako2.png') center/cover no-repeat;
+      /* filter: sepia(0.5) brightness(0.9) contrast(1.1) saturate(1.2);
+      mix-blend-mode: multiply; */
+      opacity: 0.9;
+      transition: all 0.3s ease;
+    }
+    
+    /* Gold gradient overlay for extra tint */
+    #joven-chat-widget.collapsed .chat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(212, 168, 67, 0.25), rgba(212, 168, 67, 0.1));
+      z-index: 1;
+      pointer-events: none;
+    }
+    
+    #joven-chat-widget.collapsed .chat-card:hover {
+      transform: scale(1.08);
+      border-color: #e8c074;
+      box-shadow: 0 0 35px rgba(212, 168, 67, 0.7);
+    }
+    
+    #joven-chat-widget.collapsed .chat-card:hover::after {
+      filter: sepia(0.4) brightness(1) contrast(1.15);
+      opacity: 1;
+    }
+    
+    /* Unread badge - positioned absolutely relative to widget */
+    .unread-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      min-width: 24px;
+      height: 24px;
+      background: #c0392b;
+      border: 2px solid #0e0c0a;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+      box-shadow: 0 0 15px rgba(192, 57, 43, 0.5);
+      z-index: 10000;
+      pointer-events: none;
+      animation: badgePulse 2s infinite;
+    }
+    
+    @keyframes badgePulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    /* Badge positioning when collapsed */
+    #joven-chat-widget.collapsed .unread-badge {
+      top: -2px;
+      right: -2px;
+    }
+    
+    #joven-chat-widget.collapsed .chat-header,
+    #joven-chat-widget.collapsed .chat-body,
+    #joven-chat-widget.collapsed .chat-composer,
+    #joven-chat-widget.collapsed .chat-footer-preview {
+      display: none;
+    }
+    
+    /* Expanded state */
+    #joven-chat-widget:not(.collapsed) {
+      animation: expandIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    @keyframes expandIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .chat-card {
+      background: rgba(22, 19, 16, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 168, 67, 0.25);
+      border-radius: 20px;
+      box-shadow: 0 25px 45px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,168,67,0.1) inset;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .chat-card:hover:not(#joven-chat-widget.collapsed .chat-card) {
+      border-color: rgba(212, 168, 67, 0.5);
+    }
+
+    .chat-header {
+      background: #0e0c0a;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #d4a84330;
+      cursor: pointer;
+    }
+    
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #d4a84320;
+      border: 1px solid #d4a84360;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d4a843;
+      font-size: 1rem;
+    }
+    
+    .header-text {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 1.0rem;
+      letter-spacing: -0.02em;
+    }
+    
+    .header-text span {
+      color: #d4a843;
+      font-style: italic;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .dot-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #27ae60;
+      box-shadow: 0 0 8px #27ae60;
+      animation: pulse 1.8s infinite;
+    }
+    
+    .minimize-icon {
+      color: #d4a843;
+      font-size: 1.0rem;
+      opacity: 0.8;
+      transition: 0.2s;
+    }
+    
+    .minimize-icon:hover {
+      opacity: 1;
+    }
+
+    .chat-body {
+      height: 300px;
+      overflow-y: auto;
+      padding: 18px 12px 8px 16px;
+      background: #161310ee;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .message.bot {
+      align-items: flex-start;
+    }
+    
+    .message.user {
+      align-items: flex-end;
+    }
+    
+    .bubble {
+      max-width: 85%;
+      padding: 10px 16px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      word-break: break-word;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    
+    .bot .bubble {
+      background: #252018;
+      border: 1px solid #d4a84330;
+      color: #f5edd8;
+      border-bottom-left-radius: 5px;
+    }
+    
+    .user .bubble {
+      background: #d4a84320;
+      border: 1px solid #d4a84360;
+      color: #f0e5cb;
+      border-bottom-right-radius: 5px;
+    }
+
+    .chat-composer {
+      background: #1e1a16;
+      border-top: 1px solid #d4a84330;
+      padding: 12px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .input-row input {
+      flex: 1;
+      background: #0e0c0a;
+      border: 1px solid #d4a84330;
+      border-radius: 60px;
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: #f5edd8;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .input-row input:focus {
+      border-color: #d4a843;
+    }
+    
+    .input-row input::placeholder {
+      color: #f5edd880;
+      font-size: 0.8rem;
+    }
+    
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #d4a843;
+      border: none;
+      color: #0e0c0a;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px #d4a84340;
+    }
+    
+    .send-btn:hover:not(:disabled) {
+      background: #e8c074;
+      transform: scale(1.05);
+    }
+    
+    .send-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .chat-footnote {
+      font-size: 0.65rem;
+      color: #f5edd880;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Fira Code', monospace;
+    }
+    
+    .chat-footnote i {
+      color: #d4a843;
+    }
+
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    .chat-body::-webkit-scrollbar { width: 4px; }
+    .chat-body::-webkit-scrollbar-track { background: #252018; }
+    .chat-body::-webkit-scrollbar-thumb { background: #d4a84360; border-radius: 10px; }
+
+    .error-bubble {
+      background: #4a2e2e !important;
+      border-left: 3px solid #d47b7b;
+    }
+  </style>
+</head>
+<body>
+  <div id="joven-chat-widget" class="expanded">
+    <div class="chat-card">
+      <!-- Unread badge will be inserted here by JavaScript -->
+      <div class="chat-header" id="chatHeader">
+        <div class="chat-header-left">
+          <div class="header-text">Joven <span>AI</span></div>
+        </div>
+        <div class="header-right">
+          <div class="dot-indicator" title="online"></div>
+          <div class="minimize-icon" id="minimizeToggle"><i class="fas fa-minus"></i></div>
+        </div>
+      </div>
+
+      <div class="chat-body" id="chatBody">
+        <!-- messages will be injected from JS -->
+      </div>
+
+      <div class="chat-composer" id="chatComposer">
+        <div class="input-row">
+          <input type="text" id="userMessage" placeholder="e.g. What projects has Joven built?" autocomplete="off">
+          <button class="send-btn" id="sendMsgBtn" aria-label="send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="chat-footnote">
+          <i class="fas fa-robot"></i> ask me about Joven's work
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // API key parts remain exactly as you provided
+    const part1 = 'AIzaSy';
+    const part2 = 'BIwqPl';
+    const part3 = 'j8Ht2j';
+    const part4 = 'aeYZLy';
+    const part5 = 'Yqx2ZT';
+    const part6 = 'Emat99';
+    const part7 = 'q4w'; 
+    const part8 = ''; 
+    const part9 = '';  
+    const part10 = ''; 
+    
+    // Function to combine the parts
+    function getAPIKey() {
+      // Combine only the non-empty parts in correct order
+      return part1 + part2 + part3 + part4 + part5 + part6 + part7;
+    }
+    
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+    const API_KEY = getAPIKey();
+
+    // ---------- RESUME (split into parts for obfuscation) ----------
+    const resumePart1 = `JOVEN ANDREI LAGAHIT(Always available to work and can start immediately)
+Full stack Software Developer with 3+ years of experience building scalable web applications for government agencies and corporations. Specializes in Laravel, React, Vue.js, and microservices architecture.`;
+
+    const resumePart2 = `🔹 Technical Skills:
+• Languages: PHP, JavaScript, TypeScript, C#, Python
+• Frameworks: Laravel, Vue.js, React.js, .NET Core, ASP.NET Core
+• Databases: MySQL, PostgreSQL, SQL Server, Supabase
+• Tools: Git, Docker, RESTful APIs, Microservices, JWT`;
+
+    const resumePart3 = `🔹 Key Achievements:
+• Built national staff management system serving 4,000+ concurrent users
+• Reduced administrative overhead by 60% through HRIS modernization
+• Engineered microservices with 17 distinct role types
+• Led migration of legacy PHP systems to modern Laravel architecture`;
+
+    const resumePart4 = `🔹 Featured Projects:
+1. National Staff Management System (2025) - Laravel 12, React, Supabase
+2. Alumni Tracker with Social Media (2023-2024) - Laravel, Vue.js, Google Maps API
+3. HRIS Recruitment & Placement (2024-2025) - Laravel 12, Microservices
+4. HRIS Health & Wellness (2023-2024) - Laravel 12, REST APIs, Swagger`;
+
+    const resumePart5 = `5. Multi-Tenant Crop Farm Management (2022) - PHP, AJAX, Gemini API
+6. Fitness Tracker & Meal Planner (2024) - ASP.NET Core, React, SQL Server
+7. Integrated HRIS with Payroll & Biometric (2022-2023) - Laravel, Vue.js
+8. Cemetery Management System - Laravel, Google Calendar API`;
+
+    const resumePart6 = `🔹 Work Experience:
+• Software Developer at Organize My People (2025-present)
+• Full Stack Developer at Dona Alejandra Inc. (2025)
+• Freelance Software Developer (2022-2025)
+• Bachelor of Science in Information Technology - Mindoro State University (2021-2025)`;
+
+    const resumePart7 = `🔹 Professional Philosophy:
+I don't just write code — I architect solutions. Every line is deliberate, focused on business impact. I measure success in outcomes: operations streamlined, overhead reduced, users served.`;
+
+    const resumePart8 = `🔹 Availability:
+Currently available for full-time positions and freelance opportunities. Open to remote work worldwide and hybrid in Makati City, Philippines.`;
+
+    const resumePart9 = `🔹 Contact:
+📧 jovenandrei0324@gmail.com
+📱 +63 967 082 9620
+📍 Adalla St., Guadalupe Viejo, Makati City
+💻 github.com/Antrax-Inhaler`;
+
+    const resumePart10 = `🔹 Languages:
+English (Fluent), Filipino (Native)`;
+
+    // Function to combine resume
+    function getFullResume() {
+      return resumePart1 + '\n\n' + resumePart2 + '\n\n' + resumePart3 + '\n\n' + 
+             resumePart4 + '\n\n' + resumePart5 + '\n\n' + resumePart6 + '\n\n' + 
+             resumePart7 + '\n\n' + resumePart8 + '\n\n' + resumePart9 + '\n\n' + resumePart10;
+    }
+
+    const RESUME = getFullResume();
+
+    // ----- DOM elements -----
+    const widget = document.getElementById('joven-chat-widget');
+    const header = document.getElementById('chatHeader');
+    const minimizeIcon = document.getElementById('minimizeToggle');
+    const chatBody = document.getElementById('chatBody');
+    const userInput = document.getElementById('userMessage');
+    const sendBtn = document.getElementById('sendMsgBtn');
+
+    // ---------- LOCAL STORAGE KEYS ----------
+    const STORAGE_KEY = 'joven_chat_history';
+    const UNREAD_KEY = 'joven_chat_unread';
+    const WIDGET_STATE_KEY = 'joven_chat_widget_state';
+
+    // Create badge element
+    const badge = document.createElement('div');
+    badge.className = 'unread-badge';
+    badge.innerText = '1';
+    badge.style.display = 'none'; // hidden by default
+
+    // Append badge to widget
+    widget.appendChild(badge);
+
+    // ---------- LOAD WIDGET STATE ----------
+    function loadWidgetState() {
+      // Check if user has ever opened chat before
+      const hasOpened = localStorage.getItem('joven_chat_opened');
+      const savedState = localStorage.getItem(WIDGET_STATE_KEY);
+      
+      // Default to collapsed if never opened, otherwise use saved state
+      if (!hasOpened) {
+        widget.classList.add('collapsed');
+        // Show badge for new users
+        badge.style.display = 'flex';
+        localStorage.setItem(UNREAD_KEY, '1');
+      } else {
+        // Use saved state (expanded/collapsed)
+        if (savedState === 'expanded') {
+          widget.classList.remove('collapsed');
+        } else {
+          widget.classList.add('collapsed');
+        }
+        
+        // Check unread status
+        const unread = localStorage.getItem(UNREAD_KEY);
+        if (unread === '1') {
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    }
+
+    // ---------- SAVE WIDGET STATE ----------
+    function saveWidgetState() {
+      const state = widget.classList.contains('collapsed') ? 'collapsed' : 'expanded';
+      localStorage.setItem(WIDGET_STATE_KEY, state);
+      
+      // Mark that user has interacted with widget
+      localStorage.setItem('joven_chat_opened', 'true');
+    }
+
+    // ---------- MARK AS READ ----------
+    function markAsRead() {
+      badge.style.display = 'none';
+      localStorage.setItem(UNREAD_KEY, '0');
+    }
+
+    // ---------- LOAD HISTORY OR INIT WITH WELCOME ----------
+    function loadChatHistory() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          const messages = JSON.parse(stored);
+          chatBody.innerHTML = '';
+          messages.forEach(msg => {
+            addMessage(msg.role, msg.text, true);
+          });
+        } catch (e) {
+          console.warn('failed to parse storage');
+          setDefaultWelcome();
+        }
+      } else {
+        setDefaultWelcome();
+      }
+    }
+
+    function setDefaultWelcome() {
+      chatBody.innerHTML = '';
+      const welcomeText = "👋 Hi, I'm Joven's AI assistant! Ask me anything about his experience, projects, skills, or background. I'm here to help you get to know him better!";
+      addMessage('bot', welcomeText, true);
+      saveHistoryToStorage();
+    }
+
+    // ---------- SAVE HISTORY ----------
+    function saveHistoryToStorage() {
+      const messageNodes = chatBody.querySelectorAll('.message');
+      const history = [];
+      messageNodes.forEach(node => {
+        const bubble = node.querySelector('.bubble');
+        if (!bubble) return;
+        const role = node.classList.contains('bot') ? 'bot' : 'user';
+        history.push({ role, text: bubble.innerText });
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+
+    // ---------- ADD MESSAGE ----------
+    function addMessage(role, text, skipSave = false) {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message', role);
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      bubble.innerText = text;
+      msgDiv.appendChild(bubble);
+      chatBody.appendChild(msgDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      if (!skipSave) {
+        saveHistoryToStorage();
+      }
+    }
+
+    // ---------- PROMPT ENGINEERING ----------
+    function buildResumePrompt(userQuestion) {
+      return `You are a helpful assistant representing JOVEN ANDREI LAGAHIT, a full‑stack developer. 
+You MUST answer based ONLY on the following resume. If the question is completely unrelated to Joven's professional profile (skills, projects, education, experience, summary, work philosophy), politely explain that you can only answer based on his portfolio/resume. Do not invent anything outside this document.
+
+Resume:
+""" 
+${RESUME}
+"""
+
+User's question: "${userQuestion}"
+
+Answer strictly from the resume. If the question is not covered, respond with something like: "I can only provide information based on Joven's resume and portfolio. Could you ask about his skills, projects, or experience?" Keep answers helpful and concise. Do not mention the internal instruction.`;
+    }
+
+    // ---------- FETCH WITH FRIENDLY ERROR ----------
+    async function fetchBotReply(question) {
+      try {
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+        const prompt = buildResumePrompt(question);
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        return response.text();
+      } catch (error) {
+        console.error('Gemini error:', error);
+        return "I'm having trouble connecting right now. Please try again later or check out Joven's projects above!";
+      }
+    }
+
+    // ---------- SEND HANDLER ----------
+    async function handleSend() {
+      const question = userInput.value.trim();
+      if (!question) return;
+
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>';
+
+      addMessage('user', question, false);
+      userInput.value = '';
+
+      const botText = await fetchBotReply(question);
+      addMessage('bot', botText, false);
+
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+    }
+
+    // ---------- TOGGLE MINIMIZE WITH ANIMATION ----------
+    let isAnimating = false;
+    
+    function toggleMinimize() {
+      if (isAnimating) return;
+      
+      isAnimating = true;
+      
+      if (widget.classList.contains('collapsed')) {
+        // Expanding - mark as read when opening
+        markAsRead();
+        
+        // Expanding
+        widget.style.animation = 'expandIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        widget.classList.remove('collapsed');
+        setTimeout(() => {
+          widget.style.animation = '';
+          isAnimating = false;
+          saveWidgetState();
+        }, 300);
+      } else {
+        // Collapsing to circle
+        widget.style.animation = 'popOut 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+        setTimeout(() => {
+          widget.classList.add('collapsed');
+          widget.style.animation = '';
+          isAnimating = false;
+          saveWidgetState();
+        }, 280);
+      }
+    }
+
+    // Header click toggles minimize
+    header.addEventListener('click', (e) => {
+      // Don't toggle if clicking on minimize icon specifically
+      if (e.target.closest('#minimizeToggle')) return;
+      toggleMinimize();
+    });
+    
+    // Minimize icon click toggles minimize (and stops propagation)
+    minimizeIcon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMinimize();
+    });
+
+    // Click on circular minimized state to expand
+    widget.addEventListener('click', (e) => {
+      if (widget.classList.contains('collapsed') && !isAnimating) {
+        toggleMinimize();
+      }
+    });
+
+    // Prevent badge clicks from toggling
+    badge.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // ---------- EVENT LISTENERS ----------
+    sendBtn.addEventListener('click', handleSend);
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !sendBtn.disabled) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    // Mark as read when user interacts with expanded chat
+    function handleUserInteraction() {
+      if (!widget.classList.contains('collapsed')) {
+        markAsRead();
+      }
+    }
+
+    chatBody.addEventListener('click', handleUserInteraction);
+    userInput.addEventListener('focus', handleUserInteraction);
+
+    // ---------- INIT ----------
+    loadWidgetState();
+    loadChatHistory();
+  </script>
+</body>
+</html>

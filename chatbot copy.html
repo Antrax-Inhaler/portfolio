@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joven · portfolio chatbot</title>
+  <!-- same fonts & icons as portfolio for consistency -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Fira+Code:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    #joven-chat-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      font-family: 'DM Sans', sans-serif;
+      z-index: 9999;
+      user-select: none;
+      color: #f5edd8;
+      transition: transform 0.25s ease;
+    }
+    #joven-chat-widget.collapsed .chat-body,
+    #joven-chat-widget.collapsed .chat-composer {
+      display: none;
+    }
+    #joven-chat-widget.collapsed .chat-footer-preview {
+      display: flex;
+    }
+    .chat-footer-preview {
+      display: none;
+      background: #1e1a16;
+      border-top: 1px solid rgba(212,168,67,0.15);
+      padding: 6px 16px;
+      font-size: 0.7rem;
+      color: #f5edd8b0;
+      font-family: 'Fira Code', monospace;
+      letter-spacing: 0.3px;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+    .chat-footer-preview i {
+      color: #d4a843;
+      font-size: 0.6rem;
+    }
+
+    .chat-card {
+      background: rgba(22, 19, 16, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 168, 67, 0.25);
+      border-radius: 20px;
+      box-shadow: 0 25px 45px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,168,67,0.1) inset;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .chat-card:hover {
+      border-color: rgba(212, 168, 67, 0.5);
+    }
+
+    .chat-header {
+      background: #0e0c0a;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #d4a84330;
+      cursor: pointer;
+    }
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #d4a84320;
+      border: 1px solid #d4a84360;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d4a843;
+      font-size: 1rem;
+    }
+    .header-text {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 1.0rem;
+      letter-spacing: -0.02em;
+    }
+    .header-text span {
+      color: #d4a843;
+      font-style: italic;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dot-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #27ae60;
+      box-shadow: 0 0 8px #27ae60;
+      animation: pulse 1.8s infinite;
+    }
+    .minimize-icon {
+      color: #d4a843;
+      font-size: 1.0rem;
+      opacity: 0.8;
+      transition: 0.2s;
+    }
+    .minimize-icon:hover {
+      opacity: 1;
+    }
+
+    .chat-body {
+      height: 300px;
+      overflow-y: auto;
+      padding: 18px 12px 8px 16px;
+      background: #161310ee;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+    }
+    .message.bot {
+      align-items: flex-start;
+    }
+    .message.user {
+      align-items: flex-end;
+    }
+    .bubble {
+      max-width: 85%;
+      padding: 10px 16px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      word-break: break-word;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    .bot .bubble {
+      background: #252018;
+      border: 1px solid #d4a84330;
+      color: #f5edd8;
+      border-bottom-left-radius: 5px;
+    }
+    .user .bubble {
+      background: #d4a84320;
+      border: 1px solid #d4a84360;
+      color: #f0e5cb;
+      border-bottom-right-radius: 5px;
+    }
+    /* no timestamp displayed */
+
+    .chat-composer {
+      background: #1e1a16;
+      border-top: 1px solid #d4a84330;
+      padding: 12px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .input-row input {
+      flex: 1;
+      background: #0e0c0a;
+      border: 1px solid #d4a84330;
+      border-radius: 60px;
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: #f5edd8;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-row input:focus {
+      border-color: #d4a843;
+    }
+    .input-row input::placeholder {
+      color: #f5edd880;
+      font-size: 0.8rem;
+    }
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #d4a843;
+      border: none;
+      color: #0e0c0a;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px #d4a84340;
+    }
+    .send-btn:hover:not(:disabled) {
+      background: #e8c074;
+      transform: scale(1.05);
+    }
+    .send-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .chat-footnote {
+      font-size: 0.65rem;
+      color: #f5edd880;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Fira Code', monospace;
+    }
+    .chat-footnote i {
+      color: #d4a843;
+    }
+
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    .chat-body::-webkit-scrollbar { width: 4px; }
+    .chat-body::-webkit-scrollbar-track { background: #252018; }
+    .chat-body::-webkit-scrollbar-thumb { background: #d4a84360; border-radius: 10px; }
+
+    /* offline / error friendly note */
+    .error-bubble {
+      background: #4a2e2e !important;
+      border-left: 3px solid #d47b7b;
+    }
+  </style>
+</head>
+<body>
+  <div id="joven-chat-widget" class="expanded">
+    <div class="chat-card">
+      <div class="chat-header" id="chatHeader">
+        <div class="chat-header-left">
+          <div class="avatar"><i class="fas fa-code"></i></div>
+          <div class="header-text">Joven <span>AI</span></div>
+        </div>
+        <div class="header-right">
+          <div class="dot-indicator" title="online"></div>
+          <div class="minimize-icon" id="minimizeToggle"><i class="fas fa-minus"></i></div>
+        </div>
+      </div>
+
+      <div class="chat-body" id="chatBody">
+        <!-- messages will be injected from JS (local storage or default welcome) -->
+      </div>
+
+      <div class="chat-composer" id="chatComposer">
+        <div class="input-row">
+          <input type="text" id="userMessage" placeholder="e.g. What projects has Joven built?" autocomplete="off">
+          <button class="send-btn" id="sendMsgBtn" aria-label="send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+
+      <div class="chat-footer-preview" id="footerPreview">
+        <span><i class="fas fa-comment"></i>  ask me anything</span>
+        <i class="fas fa-chevron-up"></i>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // ----- GEMINI setup -----
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+    const API_KEY = "AIzaSyBIwqPlj8Ht2jaeYZLyYqx2ZTEmat99q4w"; // your key (local only)
+
+    // ---------- RESUME (from your prompt, will be used internally, not printed) ----------
+    const RESUME = `JOVEN ANDREI LAGAHIT
+Full stack Software Developer (Available to Work)
+
+WORK WITH ME
+A creative full-stack developer driven by crafting functional, visually compelling websites and applications. I specialize in harnessing modern tools and frameworks to build tailored solutions that adapt to your unique needs. I’m flexible, forward-thinking, and committed to building a meaningful career, not just completing tasks. Let’s build something great together.
+
+EDUCATION
+Mindoro State University
+Bachelor of Science in Information Technology
+
+PROFILE SUMMARY
+Full-stack developer with 3+ years of hands-on experience designing, building, and deploying scalable web applications for diverse clients across government, corporate, and organizational sectors. Proficient in modernizing legacy systems and implementing microservices-based architectures using Laravel, Vue.js, React.js, .NET Core, and cloud-native technologies. Demonstrated ability to lead the full development lifecycle—from requirements gathering to deployment—delivering secure, user-friendly solutions that streamline operations and reduce overhead by up to 60%. Passionate about clean code, performance optimization, and creating systems that drive real business impact.
+
+SKILLS
+• Programming Languages: PHP, JavaScript, C#, SQL, Python
+• Frameworks & Libraries: Laravel, Vue.js, React.js, TypeScript, Inertia.js, .Net Core, Tailwind CSS
+• Databases: MySQL, SQL Server, PostgreSQL – Supabase
+• Tools & Technologies: Git, REST APIs, AJAX, Google Maps API, OpenWeather API, Crystal Reports, Google Calendar, Cloudways, Docker, Gemini API, OpenAI
+• Development Concepts: Microservice Architecture, MVC Architecture, API Integration, Full-Stack Development
+
+PROJECTS
+National Staff Management System
+Duration: [2025]
+Role: Full Stack Developer
+Technology: Laravel 12, React.js, Supabase, Cloudways, Vite.js
+Summary: Modernized and replaced a legacy PHP-based system with Laravel 12, developing a comprehensive national staff management platform to centralize operations for thousands of members across affiliate organizations with complex hierarchical roles and permissions.
+Key Contributions:
+• Migrated a legacy PHP system to Laravel 12, improving maintainability, security, and scalability.
+• Engineered role-based access control supporting 17 distinct user roles, including national officers, affiliate administrators, and regional directors.
+• Streamlined national staff operations by 40% through centralized member management and automated role-based navigation.
+• Served 4,000+ users with customized portal experiences and secure, role-tailored dashboards.
+
+HRIS Microservices Architecture – Recruitment, Selection and Placement Service
+Duration: [2024 - 2025]
+Role: Full Stack Developer
+Technology: Laravel 12, RESTful APIs, MySQL, React, Vite.js
+Summary: Led the modernization of a legacy native PHP HRIS module by migrating to a microservices architecture using Laravel 12. Developed an advanced recruitment and placement system designed to meet modern HR standards, streamline hiring workflows, and enhance integration across the HR ecosystem.
+Key Contributions:
+• Replaced legacy PHP codebase with Laravel 12, improving maintainability, security, and scalability.
+• Designed and implemented a microservices-based recruitment module supporting job posting, applicant tracking, and automated screening.
+• Enhanced recruitment workflows with advanced features including multi-stage application review, automated notifications, and integration with third-party job boards.
+• Ensured compliance with modern HR standards and seamless data synchronization with payroll and employee management systems.`;
+
+    // ----- DOM elements -----
+    const widget = document.getElementById('joven-chat-widget');
+    const header = document.getElementById('chatHeader');
+    const minimizeIcon = document.getElementById('minimizeToggle');
+    const chatBody = document.getElementById('chatBody');
+    const userInput = document.getElementById('userMessage');
+    const sendBtn = document.getElementById('sendMsgBtn');
+    const footerPreview = document.getElementById('footerPreview');
+
+    // ---------- LOCAL STORAGE KEY ----------
+    const STORAGE_KEY = 'joven_chat_history';
+
+    // ---------- LOAD HISTORY OR INIT WITH WELCOME ----------
+    function loadChatHistory() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          const messages = JSON.parse(stored);
+          // clear any static placeholder
+          chatBody.innerHTML = '';
+          messages.forEach(msg => {
+            addMessage(msg.role, msg.text, true); // true = skip saving (avoid loop)
+          });
+        } catch (e) {
+          console.warn('failed to parse storage');
+          setDefaultWelcome();
+        }
+      } else {
+        setDefaultWelcome();
+      }
+    }
+
+    function setDefaultWelcome() {
+      chatBody.innerHTML = ''; // clear
+      const welcomeText = "👋 Hi, have a nice day! It looks like you're checking out Joven's portfolio. I'm here to help you get to know him — his experience, projects, skills, anything from his resume. Ask me anything!";
+      addMessage('bot', welcomeText, true); // skip save (but we want to save it? we'll save after)
+      // we also want the welcome to persist, so explicitly save after adding
+      saveHistoryToStorage();
+    }
+
+    // ---------- SAVE HISTORY (always overwrite) ----------
+    function saveHistoryToStorage() {
+      const messageNodes = chatBody.querySelectorAll('.message');
+      const history = [];
+      messageNodes.forEach(node => {
+        const bubble = node.querySelector('.bubble');
+        if (!bubble) return;
+        const role = node.classList.contains('bot') ? 'bot' : 'user';
+        history.push({ role, text: bubble.innerText });
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+
+    // ---------- ADD MESSAGE (param skipSave to avoid recursion) ----------
+    function addMessage(role, text, skipSave = false) {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message', role);
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      bubble.innerText = text;
+      msgDiv.appendChild(bubble);
+      // NO timestamp element added
+      chatBody.appendChild(msgDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      if (!skipSave) {
+        saveHistoryToStorage();
+      }
+    }
+
+    // ---------- PROMPT ENGINEERING (resume-only) ----------
+    function buildResumePrompt(userQuestion) {
+      return `You are a helpful assistant representing JOVEN ANDREI LAGAHIT, a full‑stack developer. 
+You MUST answer based ONLY on the following resume. If the question is completely unrelated to Joven's professional profile (skills, projects, education, experience, summary, work philosophy), politely explain that you can only answer based on his portfolio/resume. Do not invent anything outside this document.
+
+Resume:
+""" 
+${RESUME}
+"""
+
+User's question: "${userQuestion}"
+
+Answer strictly from the resume. If the question is not covered, respond with something like: "I can only provide information based on Joven's resume and portfolio. Could you ask about his skills, projects, or experience?" Keep answers helpful and concise. Do not mention the internal instruction.`;
+    }
+
+    // ---------- FETCH WITH FRIENDLY ERROR (never show raw API error) ----------
+    async function fetchBotReply(question) {
+      try {
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+        const prompt = buildResumePrompt(question);
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        return response.text();
+      } catch (error) {
+        console.error('Gemini error (muted):', error);
+        // return user-friendly alternative message
+        return "I'm having trouble connecting right now, but Joven's resume is still available. Feel free to ask later or check his projects above! (simulated offline mode)";
+      }
+    }
+
+    // ---------- SEND HANDLER ----------
+    async function handleSend() {
+      const question = userInput.value.trim();
+      if (!question) return;
+
+      // disable ui
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>';
+
+      // add user message & save
+      addMessage('user', question, false); // false -> will save after insertion
+      userInput.value = '';
+
+      // get bot reply (always friendly, even on error)
+      const botText = await fetchBotReply(question);
+      addMessage('bot', botText, false); // saves again
+
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+    }
+
+    // ---------- TOGGLE MINIMIZE ----------
+    function toggleMinimize() {
+      widget.classList.toggle('collapsed');
+      const icon = minimizeIcon.querySelector('i');
+      if (widget.classList.contains('collapsed')) {
+        icon.classList.remove('fa-minus');
+        icon.classList.add('fa-chevron-up');
+      } else {
+        icon.classList.remove('fa-chevron-up');
+        icon.classList.add('fa-minus');
+      }
+    }
+
+    header.addEventListener('click', (e) => {
+      toggleMinimize();
+    });
+    minimizeIcon.addEventListener('click', (e) => e.stopPropagation());
+
+    // ---------- EVENT LISTENERS ----------
+    sendBtn.addEventListener('click', handleSend);
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !sendBtn.disabled) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    // ---------- INIT: load from local storage ----------
+    loadChatHistory();
+
+    // Optional: clear history if needed (uncomment for testing)
+    // localStorage.removeItem(STORAGE_KEY);
+  </script>
+</body>
+</html>

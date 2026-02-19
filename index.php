@@ -1,7 +1,3 @@
-
-Joven redesign v3 · HTML
-Copy
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +39,7 @@ Copy
             font-family:var(--font-sans);
             font-weight:300;
             overflow-x:hidden;
-            cursor:none;
+            /* cursor:none; */
         }
 
         /* ═══ CURSOR ══ */
@@ -829,7 +825,7 @@ Copy
       <div class="why-card">
         <div class="wc-num">06</div>
         <div class="wc-title">Business Impact is the Goal</div>
-        <div class="wc-body">I measure success in outcomes: <strong>operations streamlined 40%, admin overhead cut 60%</strong>. Pretty code that doesn't move your business forward isn't good enough for me.</div>
+        <div class="wc-body">I measure success in outcomes: <strong>operations optimized 40%, admin overhead cut 60%</strong>. Pretty code that doesn't move your business forward isn't good enough for me.</div>
       </div>
     </div>
   </div>
@@ -928,7 +924,7 @@ Copy
         <div class="proj-category">National System · 2025</div>
         <h3 class="proj-title">National Staff<br><em>Management System</em></h3>
         <p class="proj-desc">Replaced a crumbling legacy PHP system with a Laravel 12 powerhouse — a centralized national platform managing thousands of members across affiliate organizations with deeply complex hierarchical permissions.</p>
-        <div class="proj-impact">Streamlined national operations by <strong>40%</strong> &nbsp;·&nbsp; Served <strong>4,000+ users</strong> &nbsp;·&nbsp; Engineered <strong>17 distinct role types</strong> from national officers to regional directors</div>
+        <div class="proj-impact">Optimized national operations by <strong>40%</strong> &nbsp;·&nbsp; Served <strong>4,000+ users</strong> &nbsp;·&nbsp; Engineered <strong>17 distinct role types</strong> from national officers to regional directors</div>
         <div class="proj-stack">
           <span class="ptag">Laravel 12</span><span class="ptag">React.js</span><span class="ptag">Supabase</span><span class="ptag">Cloudways</span><span class="ptag">Vite.js</span><span class="ptag">RBAC</span>
         </div>
@@ -1358,6 +1354,7 @@ Copy
     </div>
   </div>
 </section>
+<?php include 'chatbot.html'; ?>
 <!-- ══════════════════════════════ FOOTER ══ -->
 <footer>
   <div class="footer-left">Joven <em>Andrei</em> Lagahit</div>
