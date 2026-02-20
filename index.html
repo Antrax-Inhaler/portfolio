@@ -692,6 +692,228 @@
             .nav-links{display:none;}
             section,footer{padding-left:20px;padding-right:20px;}
         }
+        /* ========== CHAT WIDGET RESPONSIVE SIZING ========== */
+/* Tablet and smaller laptops */
+@media (max-width: 1024px) {
+  #joven-chat-widget:not(.collapsed) {
+    width: 340px;
+    right: 20px;
+    bottom: 20px;
+  }
+  
+  #joven-chat-widget.collapsed {
+    width: 70px;
+    height: 70px;
+    right: 20px;
+    top: 15vh;
+  }
+  
+  #joven-chat-widget.collapsed .chat-card {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .chat-body {
+    height: 260px;
+  }
+}
+
+/* Mobile landscape and small tablets */
+@media (max-width: 768px) {
+  #joven-chat-widget:not(.collapsed) {
+    width: 300px;
+    right: 16px;
+    bottom: 16px;
+  }
+  
+  #joven-chat-widget.collapsed {
+    width: 60px;
+    height: 60px;
+    right: 16px;
+    top: 12vh;
+  }
+  
+  #joven-chat-widget.collapsed .chat-card {
+    width: 60px;
+    height: 60px;
+    border-width: 2px;
+  }
+  
+  .chat-header {
+    padding: 12px 16px;
+  }
+  
+  .header-text {
+    font-size: 0.9rem;
+  }
+  
+  .chat-body {
+    height: 240px;
+    padding: 14px 10px 6px 14px;
+  }
+  
+  .bubble {
+    font-size: 0.85rem;
+    padding: 8px 14px;
+  }
+  
+  .chat-composer {
+    padding: 10px 14px 12px;
+  }
+  
+  .input-row input {
+    padding: 10px 14px;
+    font-size: 0.8rem;
+  }
+  
+  .send-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .unread-badge {
+    min-width: 22px;
+    height: 22px;
+    font-size: 0.7rem;
+    top: -4px;
+    right: -4px;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 480px) {
+  #joven-chat-widget:not(.collapsed) {
+    width: calc(100vw - 32px);
+    right: 16px;
+    left: 16px;
+    bottom: 16px;
+    max-width: none;
+  }
+  
+  #joven-chat-widget.collapsed {
+    width: 55px;
+    height: 55px;
+    right: 16px;
+    top: 10vh;
+  }
+  
+  #joven-chat-widget.collapsed .chat-card {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .chat-header {
+    padding: 10px 14px;
+  }
+  
+  .avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+  
+  .header-text {
+    font-size: 0.85rem;
+  }
+  
+  .dot-indicator {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .minimize-icon {
+    font-size: 0.9rem;
+  }
+  
+  .chat-body {
+    height: 220px;
+  }
+  
+  .bubble {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    max-width: 90%;
+  }
+  
+  .chat-composer {
+    padding: 8px 12px 10px;
+  }
+  
+  .input-row input {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .send-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+  
+  .chat-footnote {
+    font-size: 0.6rem;
+  }
+  
+  .unread-badge {
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.65rem;
+    border-width: 1.5px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 360px) {
+  #joven-chat-widget.collapsed {
+    width: 50px;
+    height: 50px;
+    right: 12px;
+  }
+  
+  #joven-chat-widget.collapsed .chat-card {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .chat-body {
+    height: 200px;
+  }
+  
+  .bubble {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+  
+  .header-text span {
+    font-size: 0.8rem;
+  }
+}
+
+/* Adjust for very tall screens with collapsed widget */
+@media (min-height: 1000px) {
+  #joven-chat-widget.collapsed {
+    top: 12vh;
+  }
+}
+
+/* Dark mode support (if user has dark mode preference) */
+@media (prefers-color-scheme: dark) {
+  #joven-chat-widget.collapsed .chat-card {
+    box-shadow: 0 0 25px rgba(212, 168, 67, 0.5);
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  #joven-chat-widget.collapsed .chat-card {
+    border-width: 3px;
+  }
+  
+  .unread-badge {
+    border: 2px solid #ffffff;
+  }
+}
     </style>
 </head>
 <body>
@@ -904,7 +1126,7 @@
     <div class="proj-counter rv rd2">
       <div>
         <div class="proj-current" id="mainCurrent">01</div>
-        <div class="proj-total">/ 06</div>
+        <div class="proj-total">/ 07</div>
       </div>
     </div>
   </div>
@@ -930,7 +1152,9 @@
         <div class="proj-stack">
           <span class="ptag">Laravel 12</span><span class="ptag">React.js</span><span class="ptag">Supabase</span><span class="ptag">Cloudways</span><span class="ptag">Vite.js</span><span class="ptag">RBAC</span>
         </div>
-        <a href="https://github.com/Antrax-Inhaler/Integrated-HRIS-with-Multi-Payroll-Processing-Biometric-Attendance-and-Recruitment-Portal" target="_blank" class="proj-link">View on GitHub <span class="proj-link-arrow">→</span></a>
+        <a target="_blank" class="proj-link">View on GitHub <span class="proj-link-arrow"></span></a>
+        <a href="https://github.com/Antrax-Inhaler/National-Staff-Management-System-Backend-Laravel-Supabase-.git" target="_blank" class="proj-link">BackEnd <span class="proj-link-arrow">→</span></a>
+        <a href="https://github.com/Antrax-Inhaler/National-Staff-Management-System-FrontEnd-React-Vite.git" target="_blank" class="proj-link">FrontEnd <span class="proj-link-arrow">→</span></a>
       </div>
     </div>
 
@@ -963,15 +1187,15 @@
     <!-- Slide 3 - HRIS Recruitment & Placement -->
     <div class="proj-slide" data-index="2">
       <div class="proj-visual">
-        <div class="proj-img-bg" style="background-image:url('hrms/slide2.png');"></div>
+        <div class="proj-img-bg" style="background-image:url('ihrisr/slide1.png');"></div>
         <div class="proj-num-bg">3</div>
         <div class="project-image-container" style="position:relative; z-index:3; width:85%; max-height:72%;">
-          <img class="proj-screenshot primary-image" src="hrms/slide2.png" alt="Recruitment Dashboard" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0;">
-          <img class="proj-screenshot secondary-image" src="hrms/slide5.png" alt="Job Portal" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
-          <img class="proj-screenshot secondary-image" src="hrms/slide3.png" alt="Applicant Tracking" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+          <img class="proj-screenshot primary-image" src="ihrisr/slide2.png" alt="Recruitment Dashboard" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0;">
+          <img class="proj-screenshot secondary-image" src="ihrisr/slide3.png" alt="Job Portal" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+          <!-- <img class="proj-screenshot secondary-image" src="hrms/slide3.png" alt="Applicant Tracking" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
           <img class="proj-screenshot secondary-image" src="hrms/slide4.png" alt="Interview Scheduling" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
           <img class="proj-screenshot secondary-image" src="hrms/slide6.png" alt="Reports" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
-          <img class="proj-screenshot secondary-image" src="hrms/slide7.png" alt="Mobile View" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+          <img class="proj-screenshot secondary-image" src="hrms/slide7.png" alt="Mobile View" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;"> -->
         </div>
       </div>
       <div class="proj-info">
@@ -982,21 +1206,19 @@
         <div class="proj-stack">
           <span class="ptag">Laravel 12</span><span class="ptag">RESTful APIs</span><span class="ptag">MySQL</span><span class="ptag">React</span><span class="ptag">Vite.js</span><span class="ptag">Microservices</span>
         </div>
-        <a href="https://github.com/Antrax-Inhaler/Integrated-HRIS-with-Multi-Payroll-Processing-Biometric-Attendance-and-Recruitment-Portal" target="_blank" class="proj-link">View on GitHub <span class="proj-link-arrow">→</span></a>
+        <a href="https://github.com/Antrax-Inhaler/ihris-ms-recruitment.git" target="_blank" class="proj-link">View on GitHub (Admin Private Service) <span class="proj-link-arrow">→</span></a>
+        <a href="https://github.com/Antrax-Inhaler/ihris-ms-online-recruitment.git" target="_blank" class="proj-link">(Online Service) <span class="proj-link-arrow">→</span></a>
       </div>
     </div>
 
     <!-- Slide 4 - HRIS Health & Wellness -->
     <div class="proj-slide" data-index="3">
       <div class="proj-visual">
-        <div class="proj-img-bg" style="background-image:url('hrms/slide3.png');"></div>
+        <div class="proj-img-bg" style="background-image:url('ihrish/Slide1.png');"></div>
         <div class="proj-num-bg">4</div>
         <div class="project-image-container" style="position:relative; z-index:3; width:85%; max-height:72%;">
-          <img class="proj-screenshot primary-image" src="hrms/slide3.png" alt="Health Dashboard" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0;">
-          <img class="proj-screenshot secondary-image" src="hrms/slide4.png" alt="Wellness Tracking" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
-          <img class="proj-screenshot secondary-image" src="hrms/slide5.png" alt="Medical Records" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
-          <img class="proj-screenshot secondary-image" src="hrms/slide6.png" alt="Health Analytics" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
-          <img class="proj-screenshot secondary-image" src="hrms/slide7.png" alt="Mobile Health" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+          <img class="proj-screenshot primary-image" src="ihrish/Slide2.png" alt="Health Dashboard" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0;">
+          <img class="proj-screenshot secondary-image" src="ihrish/Slide3.png" alt="Wellness Tracking" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
         </div>
       </div>
       <div class="proj-info">
@@ -1007,7 +1229,7 @@
         <div class="proj-stack">
           <span class="ptag">Laravel 12</span><span class="ptag">REST APIs</span><span class="ptag">MySQL</span><span class="ptag">Swagger</span><span class="ptag">Microservices</span>
         </div>
-        <a href="https://github.com/Antrax-Inhaler/Integrated-HRIS-with-Multi-Payroll-Processing-Biometric-Attendance-and-Recruitment-Portal" target="_blank" class="proj-link">View on GitHub <span class="proj-link-arrow">→</span></a>
+        <a href="https://github.com/Antrax-Inhaler/ihris-ms-wellness.git" target="_blank" class="proj-link">View on GitHub <span class="proj-link-arrow">→</span></a>
       </div>
     </div>
 
@@ -1058,13 +1280,45 @@
         <a href="https://github.com/Antrax-Inhaler/fitness-planner" target="_blank" class="proj-link">View on GitHub <span class="proj-link-arrow">→</span></a>
       </div>
     </div>
+    <!-- Slide 7 - Integrated HRIS -->
+<div class="proj-slide" data-index="6">
+  <div class="proj-visual">
+    <div class="proj-img-bg" style="background-image:url('hrms/slide1.png');"></div>
+    <div class="proj-num-bg">7</div>
+    <div class="project-image-container" style="position:relative; z-index:3; width:85%; max-height:72%;">
+      <img class="proj-screenshot primary-image" src="hrms/slide1.png" alt="HRIS Dashboard" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0;">
+      <img class="proj-screenshot secondary-image" src="hrms/slide2.png" alt="Employee Profiles" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+      <img class="proj-screenshot secondary-image" src="hrms/slide3.png" alt="Attendance Tracking" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+      <img class="proj-screenshot secondary-image" src="hrms/slide4.png" alt="Payroll Processing" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+      <img class="proj-screenshot secondary-image" src="hrms/slide5.png" alt="Recruitment Portal" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+      <img class="proj-screenshot secondary-image" src="hrms/slide6.png" alt="Reports" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+      <img class="proj-screenshot secondary-image" src="hrms/slide7.png" alt="Mobile View" style="width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0; display:none;">
+    </div>
+  </div>
+  <div class="proj-info">
+    <div class="proj-category">Enterprise HRIS · 2023</div>
+    <h3 class="proj-title">Integrated <em>HRIS</em> (Freelance)</h3>
+    <p class="proj-desc">A unified HR platform supporting multi-type payroll processing, fingerprint biometric attendance tracking, and job portal with automatic PDS generation.</p>
+    <div class="proj-impact">Multi-type payroll processing · <strong>Biometric fingerprint</strong> attendance integration · Automated PDS document generation · Centralized employee management</div>
+    <div class="proj-stack">
+      <span class="ptag">Laravel</span>
+      <span class="ptag">JavaScript</span>
+      <span class="ptag">MySQL</span>
+      <span class="ptag">REST API</span>
+      <span class="ptag">AJAX</span>
+    </div>
+    <a href="https://github.com/Antrax-Inhaler/Integrated-HRIS-with-Multi-Payroll-Processing-Biometric-Attendance-and-Recruitment-Portal" target="_blank" class="proj-link">
+      View on GitHub <span class="proj-link-arrow">→</span>
+    </a>
+  </div>
+</div>
   </div><!-- /proj-stage -->
 
   <div class="proj-nav">
     <span class="proj-section-label">Main Projects</span>
     <div class="proj-dots" id="mainDots">
       <div class="proj-dot active"></div><div class="proj-dot"></div><div class="proj-dot"></div>
-      <div class="proj-dot"></div><div class="proj-dot"></div><div class="proj-dot"></div>
+      <div class="proj-dot"></div><div class="proj-dot"></div><div class="proj-dot"></div><div class="proj-dot"></div>
     </div>
     <div style="display:flex;gap:10px;">
       <button class="proj-nav-btn" id="mainPrev"><i class="fas fa-arrow-left"></i></button>
